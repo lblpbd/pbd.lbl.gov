@@ -6,6 +6,9 @@
 *.swp
 Thumbs.db
 
+# Paid Plugins
+wp-content/plugins/wp-migrate-db-pro/*
+
 # wordpress specific
 wp-config.php
 wp-content/uploads/
