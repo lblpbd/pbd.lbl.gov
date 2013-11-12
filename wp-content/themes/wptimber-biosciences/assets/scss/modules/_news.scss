@@ -1,0 +1,54 @@
+/*  ==================================================
+	News
+	================================================== */
+
+.news__title {
+	color: $pbd-green;
+}
+
+.news__divider {
+	margin: 8px 0;
+}
+
+/*  ==================================================
+	News Teaser - previews
+	================================================== */
+
+.tease {
+	margin: 16px 0;
+	border-top: 7px $pbd-green solid;
+}
+
+.tease-container {
+	padding: 16px;
+	border-left:   1px $gray-border solid;
+	border-right:  1px $gray-border solid;
+	border-bottom: 1px $gray-border solid;
+	background-color: $component-bg;
+	box-shadow: 0;
+	@include card-box-shadow();
+}
+
+.tease__title {
+	margin-top: 0px;
+}
+
+.tease__thumbnail {
+	float: left;
+	padding-right: 16px;
+	max-width: 100%;
+}
+.tease__title a {
+	color: #252525;
+	-webkit-transition: color 500ms;
+	   -moz-transition: color 500ms;
+			transition: color 500ms; 
+
+	&:hover {
+		color: #428bca;
+	}
+}
+.tease__date {
+	font-family: 'Ubuntu', 'Sans Source Pro', 'Helvetica Neue', sans-serif;
+	color: #777777;
+}
