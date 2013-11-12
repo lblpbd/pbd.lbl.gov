@@ -1,0 +1,25 @@
+{% extends 'layout/base-grid.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>PBD Webcasts</h1>
+			<article>
+				{{page.content}}
+			</article>
+		</div>
+		{% for video in videos %}
+			{% if current_series != video.series %}
+				{% set current_series = video.series %}
+				</div> {# close row #}
+				<div class="row">
+					<h2 class="col-xs-12 scientist__letter" id="series-{{current_series|lower}}">{{ current_series }}</h2>
+					<hr class="scientist__divider">
+				</div>
+				<div class="row">			
+			{% endif %}
+			{% include 'videos/preview.twig' %}
+		{% endfor %}
+	</div>
+	
+{% endblock %}

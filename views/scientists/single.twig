@@ -1,0 +1,83 @@
+{% extends 'layout/base.twig' %}
+{% block hero %}
+	<div class="profile__headContainer">
+		<section class="profile__head container" style="">
+			<div class="row">
+				<div class="profile__name col-xs-12">
+					<h1>{{scientist.title}}</h1>
+				</div>
+				<figure class="col-sm-4">
+					<img src="{{scientist.get_thumbnail.src}}"
+					     alt="{{scientist.get_thumbnail.caption}}"
+					     class="profile__img">
+				</figure>
+			
+				{# This needs to be associated to scientist__titles model #}
+				<article class="profile__titles col-sm-4 hidden-xs">
+						<ul>
+							{% for title in scientist.titles %}
+								<li>{{title}}</li>
+							{% else %}
+								<li>No Titles</li>
+							{% endfor %}
+						</ul>
+				</article>
+				<article class="profile__websites col-sm-4 hidden-xs">
+					<h4>Websites:</h4>
+					<ul>
+						{% for website in scientist.websites %}
+							<li><a href="{{url}}">{{name}}</a></li>
+						{% else %}
+							<li>No Websites</li>
+						{% endfor %}
+					</ul>
+				</article>
+			</div>
+		</section>
+	</div>
+{% endblock %}
+
+{% block content %}
+<section class="profile__contact col-sm-4 col-xs-12 row">
+
+	<article class="profile__address col-xs-6 col-sm-12">
+		<h2>Location Information</h2>
+		{{scientist.department_name}}<br>
+		{{scientist.address1}}<br>
+		{{scientist.address2}}<br>
+		{{scientist.city}}, {{scientist.state}} {{scientist.zip_code}} USA
+	</article>
+
+	<article class="profile__location col-xs-6 col-sm-12 ">
+		<h2>Contact Information</h2>
+		Primary Number: {{scientist.phone1}}<br>
+		{% if scientist.phone2_type != 'null' %}
+			{{scientist.phone2_type}}: {{scientist.phone2}}<br>
+		{% endif %}
+		E-Mail: <a href="mailto:{{scientist.email}}">{{scientist.email}}</a><br>
+	</article>
+
+</section>
+
+<section class="profile__bio col-sm-8 col-xs-12">
+
+	<article class="profile__emphasis">
+		<h2>Research Emphasis:</h2>
+		<p>
+			{{scientist.emphasis}}
+		</p>
+	</article>
+
+	{% if profile.summary %}
+	<article id="scientist__summary" class="profile__summary">
+		<h2>Summary:</h2>
+		<p>
+			{{scientist.summary}}
+		</p>
+	</article>
+	{% endif %}
+
+</section>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

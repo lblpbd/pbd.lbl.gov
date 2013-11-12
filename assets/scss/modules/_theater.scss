@@ -1,0 +1,76 @@
+.theater__container {
+	background-color: black(.8);
+}
+
+.theater {
+	margin: 0 auto;
+	max-width: 1000px;
+	width: 100%;
+	@include rem-fallback(padding, 1.5rem, 1rem, 0, 1rem);
+}
+.theater__video {
+	@extend %c-center;
+	position: relative;
+	padding-bottom: 65%;
+	padding-top: 30px;
+	margin-bottom: 1.5rem;
+	height: 0;
+	overflow:hidden;
+	max-width: 1000px;
+	width: 100%;
+	height: auto;
+	border: 1px #666666 solid;
+
+	@include box-shadow(black(0.8) 2px 3px 5px);
+
+	iframe, object, embed {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		max-width: 1000px;
+		height: 100%;
+	}
+}
+
+.theater__headers {
+	h1, h2, h3 {
+		color: white(.9);
+		margin-top: 10px;
+	}
+}
+
+.theater__icon {
+	font-family: 'Ubuntu', 'Helvetica Neue', sans-serif;
+	display: inline-block;
+	@include rem-fallback(padding, .75rem, 2rem, 1rem, 0);
+	@include rem(1.25);
+	
+	a {
+		color: white(0.6);
+		text-decoration: none;
+		@include transition-property(color);
+		@include transition-duration(500ms);
+		
+		&:hover {
+			color: white(0.85);
+		}
+	}
+
+	a, iframe {
+		padding-left: 30%;
+		width: 100% !important;
+	}
+}
+
+.theater__info {
+	border-top: 1px white(0.25) solid;
+	color: $off-white;
+	display: none;
+	@include rem-fallback(padding, 1rem, 0);
+}
+
+.card__subtitle--theater {
+	@extend .card__subtitle;
+	@include rem(1);
+}

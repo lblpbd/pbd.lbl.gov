@@ -1,0 +1,45 @@
+// Keep this comment here for Wordpress!
+/*!
+Theme Name: wptimber-biosciences
+Theme URI: https://github.com/bryanaka/wptimber-biosciences
+Author: Bryan Robles <bryanaka0@gmail.com>
+Author URI: https://github.com/bryanaka/
+Description: A Front-End Developers Wordpress Theme sponsored by LBL Physical Biosciences
+Version: 1.0
+License: MIT
+License URI: LICENSE
+Text Domain: biosciences
+Domain Path: /languages/
+Tags: pbd, physical, biosciences, modern, front-end, developer, theme, timber, twig
+
+*/
+
+// Vendor SCSS
+@import 'compass/css3';
+@import 'lib/all';
+
+// settings
+@import 'settings';
+
+// core
+@import 'core/core';
+
+// modules
+@import 'modules/lab_header';
+@import 'modules/main_header';
+@import 'modules/nav';
+@import 'modules/footers';
+@import 'modules/slider';
+@import 'modules/sidebar';
+@import 'modules/widget';
+@import 'modules/card';
+@import 'modules/profile';
+@import 'modules/news';
+@import 'modules/theater';
+@import 'modules/breakpoints/breakpoints';
+// styles that need to be sorted out
+@import 'inbox';
+@import 'shame';
+
+// support styles
+@import 'support/print';

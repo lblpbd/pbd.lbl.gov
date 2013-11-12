@@ -1,0 +1,37 @@
+<nav class="navbar navbar--green" role="navigation">
+  	<!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <div class="navbar-brand">
+      <h1 class="mainNav__brand">
+        <a href="/" class="visible-lg"><i class="icon-leaf "></i> Physical Biosciences Division</a>
+        <a href="/" class="hidden-lg"><i class="icon-leaf"></i> PBD</a>
+      </h1>
+    </div>
+  	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".mainNav">
+  		<span class="sr-only">Toggle navigation</span>
+  		Menu
+  	</button>
+  </div>
+
+  <div class="collapse navbar-collapse mainNav">
+    <ul class="nav navbar-nav navbar-right">
+      {% for item in menus.primary.get_items %}
+        {% if item.get_children %}
+          <li class="mainNav__link dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="{{item.get_path}}">{{item.title}} <b class="icon-double-angle-down"></b></a>
+            <ul class="dropdown-menu">
+              {% for child in item.get_children %}
+                <li class="nav-drop-item"><a href="{{child.url}}">{{child.title}}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% else %}
+          <li class="mainNav__link"><a href="{{item.get_path}}">{{item.title}}</a></li>
+        {% endif %}
+      {% else %}
+        <li>No Primary Menu Selected</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</nav>
