@@ -9,6 +9,10 @@ Thumbs.db
 # Paid Plugins
 wp-content/plugins/wp-migrate-db-pro/*
 
+# Node Modules
+node_modules
+*node_modules
+
 # wordpress specific
 wp-config.php
 wp-content/uploads/
