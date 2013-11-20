@@ -8,6 +8,7 @@ Thumbs.db
 
 # Paid Plugins
 wp-content/plugins/wp-migrate-db-pro/*
+wp-content/plugins/acf-repeater/*
 
 # Node Modules
 node_modules
