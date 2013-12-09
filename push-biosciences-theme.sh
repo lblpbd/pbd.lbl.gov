@@ -7,7 +7,3 @@ while true; do
         * ) echo "Please answer yes or no.";;
     esac
 done
-cd wp-content/themes/wptimber-biosciences
-npm install
-bower install
-cd ../../../
