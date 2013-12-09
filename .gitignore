@@ -1,10 +1,4 @@
 .sass-cache*
 assets/bower_lib*
-assets/css*
 node_modules*
-vendor*
 *.DS_Store
-
-# if you are going to build prior to deployment, uncomment the following
-# assets/js/scripts.min.js
-# style.css
