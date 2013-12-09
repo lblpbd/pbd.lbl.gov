@@ -1,5 +1,5 @@
 @import url("//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700");
-/*!
+/*
 Theme Name: wptimber-biosciences
 Theme URI: https://github.com/bryanaka/wptimber-biosciences
 Author: Bryan Robles <bryanaka0@gmail.com>
@@ -30,7 +30,7 @@ Tags: pbd, physical, biosciences, modern, front-end, developer, theme, timber, t
 /*  ==================================
 	Vendor Variables
 	================================== */
-/*!
+/*
  * Bootstrap v3.0.0
  *
  * Copyright 2013 Twitter, Inc
@@ -39,7 +39,7 @@ Tags: pbd, physical, biosciences, modern, front-end, developer, theme, timber, t
  *
  * Designed and built with all the love in the world by @mdo and @fat.
  */
-/*! normalize.css v2.1.3 | MIT License | git.io/normalize */
+/* normalize.css v2.1.3 | MIT License | git.io/normalize */
 /* line 22, ../vendor/sass-bootstrap/lib/_normalize.scss */
 article,
 aside,
@@ -198,7 +198,7 @@ figure {
 
 /* line 263, ../vendor/sass-bootstrap/lib/_normalize.scss */
 fieldset {
-  border: 1px solid #c0c0c0;
+  border: 1px solid silver;
   margin: 0 2px;
   padding: 0.35em 0.625em 0.75em;
 }
@@ -290,7 +290,7 @@ table {
   /* line 8, ../vendor/sass-bootstrap/lib/_print.scss */
   * {
     text-shadow: none !important;
-    color: #000 !important;
+    color: black !important;
     background: transparent !important;
     box-shadow: none !important;
   }
@@ -320,7 +320,7 @@ table {
   /* line 35, ../vendor/sass-bootstrap/lib/_print.scss */
   pre,
   blockquote {
-    border: 1px solid #999;
+    border: 1px solid #999999;
     page-break-inside: avoid;
   }
 
@@ -341,7 +341,7 @@ table {
   }
 
   @page {
-    margin: 2cm .5cm;
+    margin: 2cm 0.5cm;
 }
 
   /* line 59, ../vendor/sass-bootstrap/lib/_print.scss */
@@ -360,7 +360,7 @@ table {
 
   /* line 71, ../vendor/sass-bootstrap/lib/_print.scss */
   select {
-    background: #fff !important;
+    background: white !important;
   }
 
   /* line 76, ../vendor/sass-bootstrap/lib/_print.scss */
@@ -371,18 +371,18 @@ table {
   /* line 81, ../vendor/sass-bootstrap/lib/_print.scss */
   .table td,
   .table th {
-    background-color: #fff !important;
+    background-color: white !important;
   }
 
   /* line 87, ../vendor/sass-bootstrap/lib/_print.scss */
   .btn > .caret,
   .dropup > .btn > .caret {
-    border-top-color: #000 !important;
+    border-top-color: black !important;
   }
 
   /* line 91, ../vendor/sass-bootstrap/lib/_print.scss */
   .label {
-    border: 1px solid #000;
+    border: 1px solid black;
   }
 
   /* line 95, ../vendor/sass-bootstrap/lib/_print.scss */
@@ -393,7 +393,7 @@ table {
   /* line 100, ../vendor/sass-bootstrap/lib/_print.scss */
   .table-bordered th,
   .table-bordered td {
-    border: 1px solid #ddd !important;
+    border: 1px solid #dddddd !important;
   }
 }
 /* line 10, ../vendor/sass-bootstrap/lib/_scaffolding.scss */
@@ -442,7 +442,7 @@ a:hover, a:focus {
 }
 /* line 53, ../vendor/sass-bootstrap/lib/_scaffolding.scss */
 a:focus {
-  outline: thin dotted #333;
+  outline: thin dotted #333333;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2300,7 +2300,7 @@ select optgroup {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-  outline: thin dotted #333;
+  outline: thin dotted #333333;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2683,7 +2683,7 @@ textarea.input-lg, .input-group-lg > textarea.form-control,
 }
 /* line 23, ../vendor/sass-bootstrap/lib/_buttons.scss */
 .btn:focus {
-  outline: thin dotted #333;
+  outline: thin dotted #333333;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4499,7 +4499,7 @@ input[type="button"].btn-block {
 /* line 5, ../vendor/sass-bootstrap/lib/_labels.scss */
 .label {
   display: inline;
-  padding: .2em .6em .3em;
+  padding: 0.2em 0.6em 0.3em;
   font-size: 75%;
   font-weight: bold;
   line-height: 1;
@@ -5979,7 +5979,7 @@ button.close {
   border: 1px solid white;
   border-radius: 10px;
   cursor: pointer;
-  background-color: #000 \9;
+  background-color: black \9;
   background-color: rgba(0, 0, 0, 0);
 }
 /* line 175, ../vendor/sass-bootstrap/lib/_carousel.scss */
@@ -9911,7 +9911,7 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #cccccc;
   margin: 1em 0;
   padding: 0;
 }
@@ -10264,7 +10264,7 @@ img.aligncenter {
   background: #00395a;
   color: #fcfcfc;
   font-weight: 500;
-  padding: .25em 0 .25em 0;
+  padding: 0.25em 0 0.25em 0;
   border-bottom: #00598d 4px solid;
 }
 
@@ -10272,8 +10272,8 @@ img.aligncenter {
 .labHeader__brand {
   max-width: 100px;
   height: auto;
-  padding: 0.2em 1em 0 .5em;
-  padding: 0.2rem 1rem 0 .5rem;
+  padding: 0.2em 1em 0 0.5em;
+  padding: 0.2rem 1rem 0 0.5rem;
   display: inline;
   float: left;
   margin-top: -4px;
@@ -10309,7 +10309,7 @@ img.aligncenter {
   color: #fcfcfc;
   text-decoration: none;
   font-size: 12px;
-  padding: .25em 0;
+  padding: 0.25em 0;
   display: block;
   margin: 0;
   padding: 0;
@@ -10867,7 +10867,7 @@ table td, table th {
 /* line 36, ../scss/modules/_profile.scss */
 .profile__headContainer {
   background: #EDEDED;
-  border-bottom: #E5E5E5 3px solid;
+  border-bottom: #e5e5e5 3px solid;
   margin-bottom: 24px;
   margin-bottom: 1.5rem;
 }
@@ -10974,7 +10974,7 @@ table td, table th {
 
 /* line 51, ../scss/modules/_news.scss */
 .tease__date {
-  font-family: 'Ubuntu', 'Sans Source Pro', 'Helvetica Neue', sans-serif;
+  font-family: "Ubuntu", "Sans Source Pro", "Helvetica Neue", sans-serif;
   color: #777777;
 }
 
@@ -11025,7 +11025,7 @@ table td, table th {
 
 /* line 43, ../scss/modules/_theater.scss */
 .theater__icon {
-  font-family: 'Ubuntu', 'Helvetica Neue', sans-serif;
+  font-family: "Ubuntu", "Helvetica Neue", sans-serif;
   display: inline-block;
   padding: 12px 32px 16px 0px;
   padding: 0.75rem 2rem 1rem 0rem;
@@ -11064,6 +11064,36 @@ table td, table th {
 .card__subtitle--theater {
   font-size: 16px;
   font-size: 1rem;
+}
+
+/* line 1, ../scss/modules/_onestop.scss */
+#onestop a {
+  text-decoration: none;
+}
+
+/* line 5, ../scss/modules/_onestop.scss */
+.clear {
+  clear: both;
+}
+
+/* line 9, ../scss/modules/_onestop.scss */
+.onestop__onestop-element {
+  float: left;
+  min-width: 200px;
+  width: 33%;
+}
+
+/* line 15, ../scss/modules/_onestop.scss */
+.onestop__onestop-element img {
+  width: 100%;
+  max-height: 250px;
+}
+
+/* line 20, ../scss/modules/_onestop.scss */
+.effeckt-caption figcaption {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1em;
 }
 
 @media screen and (max-width: 1200px) {
@@ -11276,7 +11306,7 @@ table td, table th {
   /* line 7, ../scss/support/_print.scss */
   * {
     background: transparent !important;
-    color: #000 !important;
+    color: black !important;
     /* Black prints faster: h5bp.com/s */
     box-shadow: none !important;
     text-shadow: none !important;
@@ -11310,7 +11340,7 @@ table td, table th {
 
   /* line 37, ../scss/support/_print.scss */
   pre, blockquote {
-    border: 1px solid #999;
+    border: 1px solid #999999;
     page-break-inside: avoid;
   }
 
