@@ -1,7 +1,19 @@
-$(document).ready(function () {
+(function() {
     'use strict';
-    var height = $(window).height(),
-        imgHeight = height / 3 - 55;
+    var minHeight = 100;
 
-    $('.onestop__onestop-element img').css('height', imgHeight);
-});
+    $(document).ready(function () {
+        setOnestopHeights();
+    });
+
+    $(window).resize(function () {
+        setOnestopHeights();
+    });
+
+    var setOnestopHeights = function() {
+        var height = $(window).height(),
+            imgHeight = Math.max(height / 3 - 55, minHeight);
+
+        $('.onestop__onestop-element img').css('height', imgHeight);
+    };
+})();
