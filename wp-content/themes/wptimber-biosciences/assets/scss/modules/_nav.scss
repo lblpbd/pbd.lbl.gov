@@ -1,39 +1,16 @@
 /*  ==================================================
 	Main Navigation
 	================================================== */
-@media (min-width: 768px){
-	.navbar {
-		border-radius: 0;
-		min-height: 0;
-	}
-	.navbar-nav > li > a {
-		padding-top: 5px;
-		padding-bottom: 5px;
-		margin: 5px 3px;
-	}
-	.navbar-brand {
-		padding-top: 9px;
-		padding-bottom: 9px; 
-		a {
-			color: $off-white;
-			text-decoration: none;
-			@include transition-property(color);
-			@include transition-duration(600ms);
-			&:hover {
-				color: $pbd-yellow;
-			}
-		}
-	}
-}
-
-.breadcrumb--pbd {
-	margin-bottom: 0;
-	background-color: $component-bg;
-}
 
 .navbar {
-	border-radius: 0;
-	margin-bottom: 0px;
+	display: block;
+	&:before, &:after {
+		content: " ";
+    	display: table;
+	}
+	&:after {
+		clear: both;
+	}
 }
 
 .navbar--green {
@@ -42,52 +19,97 @@
 	border-left: none;
 	border-right: none;
 	color: $off-white;
-
-	// the navigation link selectors...
-	// ugly nesting thanks to bootstrap
-	.mainNav__link > a {
-		color: $off-white;
-
-		&:hover, &:focus {
-			color: $pbd-yellow;
-			background-color: $pbd-green;
-		}
-	}
 }
-.mainNav__brand {
-	margin: 0;
-	font-size: 24px;
-	font-weight: 500;
-	color: $off-white;
 
-	&:hover {
-		color: $pbd-yellow;
+.nav {
+	margin-left: 0;
+	margin-bottom: 0;
+	padding-left: 0;
+	list-style: none;
+}
+
+.nav__right {
+	@extend .nav;
+	float: right;
+	@include rem-fallback(padding-right, 1);
+}
+
+.nav__left {
+	@extend .nav;
+	float: left;
+	@include rem-fallback(padding-left, 1);
+}
+
+.nav__item, .nav__search {
+	position: relative;
+	display: inline-block;
+	@include rem-fallback(padding, 0.5);
+	@include rem-fallback(padding-right, 0.75);
+
+	&:hover, &:hover .nav__link {
+		background-color: #009000;
 	}
 
 }
-.navbar-brand a {
+
+.nav__item {
+	@include card-box-shadow();
+}
+
+.nav__link {
 	color: $off-white;
 	text-decoration: none;
-}
-.navbar-nav > li > a {
-	padding-top: 5px;
-	padding-bottom: 5px; 
-}
-.navbar-toggle {
-	position: relative;
-	float: right;
-	margin-right: 15px;
-	padding: 6px 7px;
-	margin-top: 8px;
-	margin-bottom: 8px;
-	background-color: $off-black;
-	color: $off-white;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	@include transition-property(background-color);
-	@include transition-duration(600ms);
-	
-	&:hover {
-		background-color: lighten($off-black, 5%);
+
+	&:hover, &:focus {
+		color: $pbd-yellow;
+		text-decoration: none;
 	}
+}
+
+.navbar__brand {
+	margin: 0;
+	@include rem-fallback(padding, 0.5);
+
+	a {
+		@extend .nav__link;
+		@extend %c-h4;
+	}
+}
+
+/*  ==================================================
+	Sub Navigation
+	================================================== */
+
+.no-touch .nav__item:hover .subnav,
+.touch .nav__item:hover .subnav.is_open {
+	position: absolute;
+	display: block;
+	width: auto;
+	height: auto;
+	@include rem-fallback(padding, .5, 1);
+	overflow: visible;
+	clip: auto;
+	left: -3px;
+	min-width: 110%;
+	box-shadow: 4px 4px 6px rgba(0,0,0,0.2);
+	border: 3px $pbd-yellow-green solid;
+	border-top: 0;
+	@include rem-fallback(margin-top, .5);
+}
+
+.subnav {
+	@extend .nav;
+	@extend %sr-only;
+	background-color: #009000;
+	z-index: $z-subnav;
+	@include card-box-shadow();
+}
+
+.subnav__item {
+	text-align: center;
+	@include rem-fallback(padding-top, 0.5);
+}
+
+.subnav__link {
+	@extend .nav__link;
 }

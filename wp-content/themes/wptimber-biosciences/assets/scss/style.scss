@@ -25,10 +25,11 @@ Tags: pbd, physical, biosciences, modern, front-end, developer, theme, timber, t
 @import 'core/core';
 
 // modules
+
 @import
-	'modules/lab_header',
 	'modules/main_header',
 	'modules/nav',
+	'modules/search',
 	'modules/footers',
 	'modules/slider',
 	'modules/tabs',
@@ -40,6 +41,7 @@ Tags: pbd, physical, biosciences, modern, front-end, developer, theme, timber, t
 	'modules/news',
 	'modules/theater',
 	'modules/onestop',
+	'modules/calendar',
 	'modules/breakpoints';
 
 // styles that need to be sorted out

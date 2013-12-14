@@ -1,3 +1,26 @@
+/*  ==================================================
+	Scientist Profiles
+	================================================== */
+
+.scientist_list {
+	@include block-grid(
+    	// This controls how many elements will be on each row of the block grid. Set this to whatever number you need, up to the max allowed in the variable.
+    	// Available options: 1-12 by default, and false.
+    	$per-row: 5,
+
+	    // This controls how much space is between each item in the block grid.
+	    // Use a variable or any pixel or em values.
+	    $spacing: $block-grid-default-spacing,
+	
+    	// This controls whether or not base styles come through, set to false to leave out.
+    	$base-style: true
+  	);
+
+  	& > li {
+  		clear: none !important;
+	}
+}
+
 .scientist__divider {
 	border-top-color: $pbd-green;
 	width: 99%;
@@ -46,7 +69,7 @@
 }
 
 .profile__icons {
-	@include rem(2.25);
+	@include font-size(2.25);
 	@include rem-fallback(padding-top, 1);
 	text-align: center;
 	a {
@@ -64,6 +87,5 @@
 }
 
 .profile__address, .profile__location {
-	margin-bottom: 24rem;
-	margin-bottom: 1.5rem;
+	@include rem-fallback(margin-bottom, 1.5);
 }

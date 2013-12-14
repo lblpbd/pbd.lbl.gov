@@ -1,4 +1,4 @@
-{% extends 'layout/base-foundation.twig' %}
+{% extends 'layout/base.twig' %}
 {% block hero %}
 	<div class="profile__headContainer">
 		<section class="profile__head container--foundation" style="">
@@ -106,6 +106,7 @@
 		{% if scientist.summary %}
 		<article id="scientist__summary" class="profile__summary">
 			<h2>Summary:</h2>
+			<hr>
 			<p>
 				{{scientist.summary|raw}}
 			</p>
@@ -118,7 +119,7 @@
 {% endblock %}
 
 {% block footer %}
-{% include "components/footer-foundation.twig" %}
+{% include "components/footer.twig" %}
 <script>
 // ghetto tabs, revisit when possible
 (function($){
