@@ -1,6 +1,10 @@
 (function(window, document, $){
     'use strict';
 
+    $(function() {
+        FastClick.attach(document.body);
+    });
+
     window.TestSlider = $('#slider').responsiveSlides({
         auto: true,             // Boolean: Animate automatically, true or false
         speed: 500,            // Integer: Speed of the transition, in milliseconds
@@ -29,18 +33,41 @@
         });
     }
     // touch nav
-    if(window.Modernizr.touch) {
-        var $nav_items = $('.nav__item');
-        $nav_items.on('click', '.js-navDropdown', function(event) {
+    $('.nav__item').on('click', '.js-navDropdown', function(event) {
+        if(window.innerWidth <= 850 || window.Modernizr.touch) {
             event.stopPropagation();
             event.preventDefault();
-            $(this).siblings('.subnav').toggleClass('is_open');
-        });
-        $('body').on('click', function(event) {
-            event.preventDefault();
             $('.subnav').removeClass('is_open');
-        });
-    }
+            $(this).siblings('.subnav').toggleClass('is_open');
+        }
+    });
+    $('.nav__item').on('click', '.js-closeSubNav', function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        var $currentSubNav = $(event.target).closest('.subnav');
+        $currentSubNav.removeClass('is_open');
+    });
+
+    // off canvas nav
+    var $nav = $('.nav__right');
+    $('#openNavButton').on('click', function() {
+        $nav.addClass('is_open');
+    });
+    
+    Hammer(document.body).on('swipeleft', function() {
+        $nav.addClass('is_open');
+    });
+
+    $('#closeNavButton').on('click', function() {
+        $nav.removeClass('is_open');
+    });
+
+    Hammer(document.body).on('swiperight', function() {
+        $nav.removeClass('is_open');
+    });
+
+
+
     // search
     $('.js-search').on('click', function(event) {
         event.stopPropagation();
