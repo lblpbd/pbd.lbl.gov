@@ -1,7 +1,0 @@
-/* Need to set all parents of the div inside the one landing page
-to 100% height so that doing percentage height for the div element will
-work */
-html, body, .container, .row, .container-wrap, #onestop, .effeckt-caption {
-    width: 100%;
-    height: 100%;
-}
