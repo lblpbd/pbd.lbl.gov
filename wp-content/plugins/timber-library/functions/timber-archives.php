@@ -1,16 +1,20 @@
 <?php
 class TimberArchives extends TimberCore {
-	function __construct($args){
-		$this->init($args);
+
+	var $base = '';
+
+	function __construct($args, $base = ''){
+		$this->init($args, $base);
 	}
 
-	function init($args){
+	function init($args, $base = ''){
+		$this->base = $base;
 		$this->items = $this->get_items($args);
 	}
 
 	function get_archives_link($url, $text) {
 		$ret['text'] = $ret['title'] = $ret['name'] = wptexturize($text);
-		$ret['url'] = $ret['link'] = esc_url($url);
+		$ret['url'] = $ret['link'] = esc_url(TimberHelper::prepend_to_url($url, $this->base));
 		return $ret;
 	}
 
@@ -28,13 +32,13 @@ class TimberArchives extends TimberCore {
 			foreach ( (array) $results as $result) {
 				$url = get_year_link($result->year);
 				$text = sprintf('%d', $result->year);
-				$output[] = self::get_archives_link($url, $text);
+				$output[] = $this->get_archives_link($url, $text);
 			}
 		}
 		return $output;
 	}
 
-	function get_items_montly($args, $last_changed, $join, $where, $order, $limit){
+	function get_items_montly($args, $last_changed, $join, $where, $order, $limit, $nested = true){
 		global $wpdb, $wp_locale;
 		$output = array();
 		$defaults = array(
@@ -55,13 +59,25 @@ class TimberArchives extends TimberCore {
 			foreach ( (array) $results as $result ) {
 				$url = get_month_link( $result->year, $result->month );
 				/* translators: 1: month name, 2: 4-digit year */
-				if ($show_year){
+
+				if ($show_year && !$nested){
 					$text = sprintf(__('%1$s %2$d'), $wp_locale->get_month($result->month), $result->year);
 				} else {
 					$text = sprintf(__('%1$s'), $wp_locale->get_month($result->month));
 				}
-				$output[] = self::get_archives_link($url, $text);
+				if ($nested){
+					$output[$result->year][] = $this->get_archives_link($url, $text);
+				} else {
+					$output[] = $this->get_archives_link($url, $text);
+				}
 			}
+		}
+		if ($nested){
+			$out2 = array();
+			foreach($output as $year=>$months){
+				$out2[] = array('name' => $year, 'children' => $months);
+			}
+			return $out2;
 		}
 		return $output;
 	}
@@ -74,6 +90,8 @@ class TimberArchives extends TimberCore {
 			'format' => 'html', 'before' => '',
 			'after' => '', 'show_post_count' => false,
 			'order' => 'DESC',
+			'post_type' => 'post',
+			'nested' => true
 		);
 
 		$r = wp_parse_args( $args, $defaults );
@@ -111,7 +129,7 @@ class TimberArchives extends TimberCore {
 			$archive_week_end_date_format = get_option('date_format');
 		}
 
-		$where = apply_filters( 'getarchives_where', "WHERE post_type = 'post' AND post_status = 'publish'", $r );
+		$where = apply_filters( 'getarchives_where', "WHERE post_type = '".$post_type."' AND post_status = 'publish'", $r );
 		$join = apply_filters( 'getarchives_join', '', $r );
 
 		$output = array();
@@ -123,7 +141,7 @@ class TimberArchives extends TimberCore {
 		}
 
 		if ( 'monthly' == $type ) {
-			$output = $this->get_items_montly($args, $last_changed, $join, $where, $order, $limit);
+			$output = $this->get_items_montly($args, $last_changed, $join, $where, $order, $limit, $nested);
 		} elseif ('yearly' == $type) {
 			$output = $this->get_items_yearly($args, $last_changed, $join, $where, $order, $limit);
 		} elseif ( 'yearlymonthly' == $type || 'yearmonth' == $type){
@@ -148,7 +166,7 @@ class TimberArchives extends TimberCore {
 					$url	= get_day_link($result->year, $result->month, $result->dayofmonth);
 					$date = sprintf('%1$d-%2$02d-%3$02d 00:00:00', $result->year, $result->month, $result->dayofmonth);
 					$text = mysql2date($archive_day_date_format, $date);
-					$output[] = self::get_archives_link($url, $text);
+					$output[] = $this->get_archives_link($url, $text);
 				}
 			}
 		} elseif ( 'weekly' == $type ) {
@@ -172,7 +190,7 @@ class TimberArchives extends TimberCore {
 							$arc_week_end = date_i18n($archive_week_end_date_format, $arc_week['end']);
 							$url  = sprintf('%1$s/%2$s%3$sm%4$s%5$s%6$sw%7$s%8$d', home_url(), '', '?', '=', $arc_year, '&amp;', '=', $result->week);
 							$text = $arc_week_start . $archive_week_separator . $arc_week_end;
-							$output[] = self::get_archives_link($url, $text);
+							$output[] = $this->get_archives_link($url, $text);
 						}
 					}
 			}

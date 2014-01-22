@@ -56,7 +56,10 @@
 			$file = parse_url($file);
 			$path_parts = pathinfo($file['path']);
 			$basename = md5($filename);
-			$ext = $path_parts['extension'];
+			$ext = 'jpg';
+			if (isset($path_parts['extension'])){
+				$ext = $path_parts['extension'];
+			}
 			return $dir . '/' . $basename. '.' . $ext;
 		}
 
@@ -120,10 +123,9 @@
 				$current_size = $image->get_size();
 				$ow = $current_size['width'];
 				$oh = $current_size['height'];
+				$old_aspect = $ow / $oh;
 				if ($h) {
 					$new_aspect = $w / $h;
-					$old_aspect = $ow / $oh;
-
 					if ($new_aspect > $old_aspect) {
 						//cropping a vertical photo horitzonally
 						$oht = $ow / $new_aspect;
@@ -135,9 +137,19 @@
 						$image->crop($ox, 0, $owt, $oh, $w, $h);
 					}
 				} else {
-					$image->resize($w, $w);
+					$h = $w;
+					if ($old_aspect < 1){
+						$h = $w / $old_aspect;
+						$image->crop(0, 0, $ow, $oh, $w, $h);
+					} else {
+						$image->resize($w, $h);
+					}
 				}
-				$image->save($new_root_path);
+				$result = $image->save($new_root_path);
+				if (is_wp_error($result)){
+					error_log('Error resizing image');
+					error_log(print_r($result, true));
+				}
 				if ($abs){
 					return untrailingslashit(site_url()).$new_path;
 				}

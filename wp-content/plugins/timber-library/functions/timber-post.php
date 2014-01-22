@@ -41,6 +41,8 @@ class TimberPost extends TimberCore {
 		}
 		$post_info = $this->get_info($pid);
 		$this->import($post_info);
+		//cant have a function, so gots to do it this way
+		$this->class = $this->post_class();
 	}
 
 	/**
@@ -48,6 +50,7 @@ class TimberPost extends TimberCore {
 	*/
 	function get_edit_url() {
 		if ($this->can_edit()) {
+			return get_edit_post_link($this->ID);
 			return '/wp-admin/post.php?post=' . $this->ID . '&action=edit';
 		}
 		return false;
@@ -136,7 +139,7 @@ class TimberPost extends TimberCore {
 		$trimmed = false;
 		if (isset($this->post_excerpt) && strlen($this->post_excerpt)) {
 			if ($force) {
-				$text = TimberHelper::trim_words($this->post_excerpt, $len);
+				$text = TimberHelper::trim_words($this->post_excerpt, $len, false);
 				$trimmed = true;
 			} else {
 				$text = $this->post_excerpt;
@@ -160,7 +163,9 @@ class TimberPost extends TimberCore {
 			}
 			if (!$strip){
 				$last_p_tag = strrpos($text, '</p>');
-				$text = substr($text, 0, $last_p_tag);
+				if ($last_p_tag !== false){
+					$text = substr($text, 0, $last_p_tag);
+				}
 				if ($last != '.' && $trimmed) {
 					$text .= ' &hellip; ';
 				}
@@ -196,8 +201,10 @@ class TimberPost extends TimberCore {
 			return;
 		}
 		foreach ($customs as $key => $value) {
-			$v = $value[0];
-			$customs[$key] = maybe_unserialize($v);
+			if (is_array($value) && count($value) == 1 && isset($value[0])){
+				$value = $value[0];
+			}
+			$customs[$key] = maybe_unserialize($value);
 		}
 		$customs = apply_filters('timber_post_get_meta', $customs, $pid, $this);
 		return $customs;
@@ -231,10 +238,55 @@ class TimberPost extends TimberCore {
 	}
 
 	function get_next() {
-		if (!isset($this->next)){
-			$this->next = new $this->PostClass(get_adjacent_post( false, "", false ));
+		if (!isset($this->_next)){
+			global $post;
+			$this->_next = null;
+			$old_global = $post;
+			$post = $this;
+			$adjacent = get_adjacent_post(false, '', false);
+			if ($adjacent){
+				$this->_next = new $this->PostClass($adjacent);
+			}
+			$post = $old_global;
 		}
-		return $this->next;
+		return $this->_next;
+	}
+
+	public function get_pagination(){
+		global $post, $page, $numpages, $multipage, $more, $pagenow;
+		$old_global_post = $post;
+		$post = $this;
+		$ret = array();
+		if ($multipage){
+			for ( $i = 1; $i <= $numpages; $i++ ) {
+				$link = self::get_wp_link_page($i);
+				$data = array('name' => $i, 'title' => $i, 'text' => $i, 'link' => $link);
+				if ($i == $page){
+					$data['current'] = true;
+				}
+				$ret['pages'][] = $data;
+			}
+			$i = $page - 1;
+			if ( $i ) {
+				$link = self::get_wp_link_page( $i );
+				$ret['prev'] = array('link' => $link);
+			}
+			$i = $page + 1;
+			if ( $i <= $numpages ) {
+				$link = self::get_wp_link_page( $i );
+				$ret['next'] = array('link' => $link);
+			}
+		}
+		return $ret;
+	}
+
+	private static function get_wp_link_page($i){
+		$link = _wp_link_page($i);
+		$link = new SimpleXMLElement($link.'</a>');
+		if (isset($link['href'])){
+			return $link['href'];
+		}
+		return '';
 	}
 
 	public function get_path() {
@@ -242,10 +294,18 @@ class TimberPost extends TimberCore {
 	}
 
 	function get_prev() {
-		if (!isset($this->prev)){
-			$this->prev = new $this->PostClass(get_adjacent_post( false, "", true ));
+		if (!isset($this->_prev)){
+			global $post;
+			$this->_prev = null;
+			$old_global = $post;
+			$post = $this;
+			$adjacent = get_adjacent_post(false, '', true);
+			if ($adjacent){
+				$this->_prev = new $this->PostClass($adjacent);
+			}
+			$post = $old_global;
 		}
-		return $this->prev;
+		return $this->_prev;
 	}
 
 	function get_parent() {
@@ -373,7 +433,7 @@ class TimberPost extends TimberCore {
 
 			} else {
 				foreach ($terms as &$term) {
-					$term = new $TermClass($term->term_id);
+					$term = new $TermClass($term->term_id, $tax);
 				}
 				if ($merge && is_array($terms)) {
 					$ret = array_merge($ret, $terms);
@@ -387,6 +447,21 @@ class TimberPost extends TimberCore {
 		}
 		$this->_get_terms[$tax] = $ret;
 		return $ret;
+	}
+
+	function has_term($term_name_or_id, $taxonomy = 'all'){
+		if ($taxonomy == 'all' || $taxonomy == 'any'){
+			$taxes = get_object_taxonomies($this->post_type, 'names');
+			$ret = false;
+			foreach($taxes as $tax){
+				if (has_term($term_name_or_id, $tax, $this->ID)){
+					$ret = true;
+					break;
+				}
+			}
+			return $ret;
+		}
+		return has_term($term_name_or_id, $taxonomy, $this->ID);
 	}
 
 	function get_image($field) {
@@ -451,7 +526,10 @@ class TimberPost extends TimberCore {
 	public function get_field($field_name) {
 		$value = apply_filters('timber_post_get_meta_field_pre', null, $this->ID, $field_name, $this);
 		if ($value === null){
-			$value = get_post_meta($this->ID, $field_name, true);
+			$value = get_post_meta($this->ID, $field_name);
+			if (is_array($value) && count($value) == 1){
+				$value = $value[0];
+			}
 		}
 		$value = apply_filters('timber_post_get_meta_field', $value, $this->ID, $field_name, $this);
 		return $value;
@@ -465,7 +543,33 @@ class TimberPost extends TimberCore {
 		return get_post_format($this->ID);
 	}
 
-	//Aliases
+	// Docs
+
+	public function get_method_values(){
+		$ret = parent::get_method_values();
+		$ret['author'] = $this->author();
+		$ret['categories'] = $this->categories();
+		$ret['category'] = $this->category();
+		$ret['children'] = $this->children();
+		$ret['comments'] = $this->comments();
+		$ret['content'] = $this->content();
+		$ret['display_date'] = $this->display_date();
+		$ret['edit_link'] = $this->edit_link();
+		$ret['format'] = $this->format();
+		$ret['link'] = $this->link();
+		$ret['next'] = $this->next();
+		$ret['pagination'] = $this->pagination();
+		$ret['parent'] = $this->parent();
+		$ret['path'] = $this->path();
+		$ret['prev'] = $this->prev();
+		$ret['terms'] = $this->terms();
+		$ret['tags'] = $this->tags();
+		$ret['thumbnail'] = $this->thumbnail();
+		$ret['title'] = $this->title();
+		return $ret;
+	}
+
+	// Aliases
 	public function author() {
 		return $this->get_author();
 	}
@@ -486,8 +590,8 @@ class TimberPost extends TimberCore {
 		return $this->get_comments();
 	}
 
-	public function content() {
-		return $this->get_content();
+	public function content($page  = 0) {
+		return $this->get_content(0, $page);
 	}
 
 	public function display_date(){
@@ -512,6 +616,14 @@ class TimberPost extends TimberCore {
 
 	public function next() {
 		return $this->get_next();
+	}
+
+	public function pagination(){
+		return $this->get_pagination();
+	}
+
+	public function parent(){
+		return $this->get_parent();
 	}
 
 	public function path() {
@@ -541,5 +653,12 @@ class TimberPost extends TimberCore {
 	public function title() {
 		return $this->get_title();
 	}
+
+	public function post_class($class='') {
+		$pid = $this->ID;
+		$class_array = get_post_class($class, $pid);
+		return implode(' ', $class_array);
+	}
+
 
 }

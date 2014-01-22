@@ -37,12 +37,14 @@ class TimberLoader {
                 $expires = $expires[0];
         }
 
-        ksort( $data );
-        $key = md5( $file . json_encode( $data ) );
+        $key = null;
 
         $output = false;
-        if ( false !== $expires )
+        if ( false !== $expires ){
+            ksort( $data );
+            $key = md5( $file . json_encode( $data ) );
             $output = $this->get_cache( $key, self::CACHEGROUP, $cache_mode );
+        }
 
         if ( false === $output || null === $output ) {
             $twig = $this->get_twig();
@@ -55,7 +57,7 @@ class TimberLoader {
             $output = $twig->render($file, $data);
         }
 
-        if ( false !== $output && false !== $expires )
+        if ( false !== $output && false !== $expires && null !== $key )
             $this->set_cache( $key, $output, self::CACHEGROUP, $expires, $cache_mode );
 
         return $output;
@@ -88,6 +90,10 @@ class TimberLoader {
 		$theme_locs = array();
 		$child_loc = get_stylesheet_directory();
 		$parent_loc = get_template_directory();
+		if (DIRECTORY_SEPARATOR == '\\') {
+			$child_loc = str_replace('/', '\\', $child_loc);
+			$parent_loc = str_replace('/', '\\', $parent_loc);
+		}
 		$theme_locs[] = $child_loc;
 		$theme_locs[] = trailingslashit($child_loc) . trailingslashit(Timber::$dirname);
 		if ($child_loc != $parent_loc) {
@@ -142,6 +148,7 @@ class TimberLoader {
 		$locs = array_merge($locs, $this->get_locations_theme());
 		$locs = array_merge($locs, $this->get_locations_caller($caller));
 		$locs = array_unique($locs);
+		$locs = apply_filters('timber_locations', $locs);
 		return $locs;
 	}
 

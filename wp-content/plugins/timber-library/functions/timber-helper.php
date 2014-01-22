@@ -7,8 +7,14 @@ class TimberHelper {
 		if (defined('WP_DISABLE_TRANSIENTS')){
 			$disable_transients = WP_DISABLE_TRANSIENTS;
 		}
-		if (false === ($data = get_transient($slug)) || $disable_transients){
+		$data = null;
+		if ($transient_time === false){
+			$data = $callback();
+			return $data;
+		}
+		if (is_callable($callback) && (false === ($data = get_transient($slug)) || $disable_transients) && $transient_time !== false){
 			$cache_lock_slug = $slug.'_lock';
+
 			if (get_transient($cache_lock_slug)){
 				//the server is currently executing the process.
 				//We're just gonna dump these users. Sorry!
@@ -94,6 +100,16 @@ class TimberHelper {
 		return $old_root_path;
 	}
 
+	public static function is_local($url){
+		if (strstr($url, $_SERVER['HTTP_HOST'])){
+			return true;
+		}
+		return false;
+	}
+
+	/* URL Stuff
+	======================== */
+
 	public static function get_rel_url($url, $force = false){
 		if (!strstr($url, $_SERVER['HTTP_HOST']) && !$force){
 			return $url;
@@ -108,6 +124,24 @@ class TimberHelper {
 
 	public static function get_rel_path($src) {
 		return str_replace(ABSPATH, '', $src);
+	}
+
+	public static function remove_double_slashes($url){
+		$url = str_replace('//', '/', $url);
+		if (strstr($url, 'http:') && !strstr($url, 'http://')){
+			$url = str_replace('http:/', 'http://', $url);
+		}
+		return $url;
+	}
+
+	public static function prepend_to_url($url, $path){
+		if (strstr(strtolower($url), 'http')){
+			$url_parts = parse_url($url);
+			$url = $url_parts['scheme'].'://'.$url_parts['host'].$path.$url_parts['path'];
+		} else {
+			$url = $url.$path;
+		}
+		return self::remove_double_slashes($url);
 	}
 
 	public static function download_url($url, $timeout = 300) {
@@ -261,7 +295,7 @@ class TimberHelper {
 	public static function get_posts_by_meta($key, $value) {
 		global $wpdb;
 		$query = $wpdb->prepare("SELECT post_id FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value = %s", $key, $value);
-		$results = $wpdb->col($query);
+		$results = $wpdb->get_col($query);
 		$pids = array();
 		foreach ($results as $result) {
 			if (get_post($result)) {
@@ -329,8 +363,14 @@ class TimberHelper {
 		if (is_array($array)) {
 			$i = 0;
 			foreach ($array as $arr) {
-				if ($arr->$key == $value || $arr[$key] == $value) {
-					return $i;
+				if (is_array($arr)){
+					if ($arr[$key] == $value){
+						return $i;
+					}
+				} else {
+					if ($arr->$key == $value) {
+						return $i;
+					}
 				}
 				$i++;
 			}
@@ -373,6 +413,15 @@ class TimberHelper {
 		return ($i % 2) != 0;
 	}
 
+	public static function is_external($url){
+		$has_http = strstr(strtolower($url), 'http');
+        $on_domain = strstr($url, $_SERVER['HTTP_HOST']);
+        if ($has_http && !$on_domain){
+            return true;
+        }
+        return false;
+	}
+
 	public static function twitterify($ret) {
 		$ret = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $ret);
 		$ret = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $ret);
@@ -396,7 +445,7 @@ class TimberHelper {
 			'next_text' => __('Next &raquo;'),
 			'end_size' => 1,
 			'mid_size' => 2,
-			'type' => 'plain',
+			'type' => 'array',
 			'add_args' => false, // array of query args to add
 			'add_fragment' => ''
 		);
@@ -406,8 +455,9 @@ class TimberHelper {
 
 		// Who knows what else people pass in $args
 		$total = (int) $total;
-		if ( $total < 2 )
+		if ( $total < 2 ){
 			return;
+		}
 		$current  = (int) $current;
 		$end_size = 0  < (int) $end_size ? (int) $end_size : 1; // Out of bounds?  Make it the default.
 		$mid_size = 0 <= (int) $mid_size ? (int) $mid_size : 2;
@@ -416,61 +466,46 @@ class TimberHelper {
 		$page_links = array();
 		$n = 0;
 		$dots = false;
-
-		if ( $prev_next && $current && 1 < $current ) :
+		if ( $prev_next && $current && 1 < $current ){
 			$link = str_replace('%_%', 2 == $current ? '' : $format, $base);
 			$link = str_replace('%#%', $current - 1, $link);
-			if ( $add_args )
+			if ( $add_args ){
 				$link = add_query_arg( $add_args, $link );
+			}
 			$link .= $add_fragment;
-			$page_links[] = '<a class="prev page-numbers" href="' . esc_url( apply_filters( 'paginate_links', $link ) ) . '">' . $prev_text . '</a>';
-		endif;
-		for ( $n = 1; $n <= $total; $n++ ) :
+			$page_links[] = array('class' => 'prev page-numbers', 'link' => esc_url( apply_filters( 'paginate_links', $link )), 'title' => $prev_text);
+		}
+		for ( $n = 1; $n <= $total; $n++ ) {
 			$n_display = number_format_i18n($n);
-			if ( $n == $current ) :
-				//$page_links[] = "<span class='page-numbers current'>$n_display</span>";
-				$page_links[] = array('class' => 'page-number current', 'title' => $n_display, 'text' => $n_display);
+			if ( $n == $current ) {
+				$page_links[] = array('class' => 'page-number page-numbers current', 'title' => $n_display, 'text' => $n_display, 'name' => $n_display);
 				$dots = true;
-			else :
-				if ( $show_all || ( $n <= $end_size || ( $current && $n >= $current - $mid_size && $n <= $current + $mid_size ) || $n > $total - $end_size ) ) :
+			} else {
+				if ( $show_all || ( $n <= $end_size || ( $current && $n >= $current - $mid_size && $n <= $current + $mid_size ) || $n > $total - $end_size ) ) {
 					$link = str_replace('%_%', 1 == $n ? '' : $format, $base);
 					$link = str_replace('%#%', $n, $link);
-					if ( $add_args )
+					if ( $add_args ) {
 						$link = add_query_arg( $add_args, $link );
+					}
 					$link = trailingslashit($link).ltrim($add_fragment, '/');
-					//$page_links[] = "<a class='page-numbers' href='" . esc_url( apply_filters( 'paginate_links', $link ) ) . "'>$n_display</a>";
-					$page_links[] = array('class' => 'page-number', 'link' => esc_url( apply_filters( 'paginate_links', $link ) ), 'title' => $n_display);
+					$page_links[] = array('class' => 'page-number page-numbers', 'link' => esc_url( apply_filters( 'paginate_links', $link ) ), 'title' => $n_display);
 					$dots = true;
-				elseif ( $dots && !$show_all ) :
+				} elseif ( $dots && !$show_all ) {
 					$page_links[] = array('class' => 'dots', 'title' => __( '&hellip;' ));
-					//$page_links[] = '<span class="page-numbers dots">' . __( '&hellip;' ) . '</span>';
 					$dots = false;
-				endif;
-			endif;
-		endfor;
-		if ( $prev_next && $current && ( $current < $total || -1 == $total ) ) :
+				}
+			}
+		}
+		if ( $prev_next && $current && ( $current < $total || -1 == $total ) ) {
 			$link = str_replace('%_%', $format, $base);
 			$link = str_replace('%#%', $current + 1, $link);
-			if ( $add_args )
+			if ( $add_args ) {
 				$link = add_query_arg( $add_args, $link );
+			}
 			$link = trailingslashit($link).$add_fragment;
-
-			$page_links[] = '<a class="next page-numbers" href="' . esc_url( apply_filters( 'paginate_links', $link ) ) . '">' . $next_text . '</a>';
-		endif;
-		switch ( $type ) :
-			case 'array' :
-				return $page_links;
-				break;
-			case 'list' :
-				$r .= "<ul class='page-numbers'>\n\t<li>";
-				$r .= join("</li>\n\t<li>", $page_links);
-				$r .= "</li>\n</ul>\n";
-				break;
-			default :
-				$r = join("\n", $page_links);
-				break;
-		endswitch;
-		return $r;
+			$page_links[] = array('class' => 'next page-numbers', 'link' => esc_url( apply_filters( 'paginate_links', $link ) ), 'title' => $next_text);
+		}
+		return $page_links;
 	}
 }
 

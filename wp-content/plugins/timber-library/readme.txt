@@ -2,8 +2,8 @@
 Contributors: jarednova
 Tags: template engine, templates, twig
 Requires at least: 3.5
-Stable tag: 0.15.5
-Tested up to: 3.7.1
+Stable tag: 0.16.6
+Tested up to: 3.8.0
 PHP version: 5.3.0 or greater
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -40,6 +40,53 @@ Timber is great for any WordPress developer who cares about writing good, mainta
 
 
 == Changelog ==
+
+= 0.16.6 =
+* Router plays nice with installs in subdirectories (thanks @TerminalPixel)
+* ACF Timber now initializes on Init (thanks @Zerek)
+* Composer is updated (thanks @Rarst)
+* $autoescape bug fixed (thanks @ParisHolley)
+* You can now select a term ID from a specific taxonomy (thanks @mgmartel)
+* added stripshortcodes filter
+* TimberMenuItems now have is_external method
+* Other misc bugs
+
+= 0.16.5 =
+* print_a lives! added methods for TimberPost
+* quick fix on TimberPost::content which was generating warning
+
+= 0.16.4 =
+* Fixed a few things on image handling
+* Updated to Twig 1.15 (thanks @fabpot)
+* Added wp_link_pages as TimberPost::pagination
+* New filter to help with template selection (thanks @zlove)
+
+= 0.16.3 =
+* Added width, height and aspect methods for TimberImages
+* Timber::pagination can now accept a single integer as the overall "size" argument (for the total number of pages that get shown)
+* TimberPost->class (usage: `<article class="{{post.class}}"`>) will now show you the products of post_class
+* Sanity checks for ACF (thanks @parisholley)
+* Fixed bug in TimberPost::prev and TimberPost::next that could return draft posts (thanks @slimndap)
+* Fixed bug with extra ellipsis in some previews (thanks @parisholley)
+
+= 0.16.2 =
+* Added has_term to TimberPost
+* Extra checks to make sure redirected links don't get 404 body class
+* Misc bugs
+
+= 0.16.1 =
+* Bug fix on ugly permalinks for pagination
+* Fixed issue where posts retrieved via an array of IDs was truncated at the default post count
+* Fixed issue where loading terms from multi taxonomies (thanks @WL-hohoho)
+* Added support for post_class on TimberPost (thanks @slimndap)
+* new `array` filter to convert single-values into array in twig
+* Cleaned-up and added translation support to `time_ago` filter (thanks @WL-hohoho)
+
+= 0.16.0 =
+* TimberTheme is now available in default context as .theme
+* Post meta now respects arrays (watch out for some possible compatiblity issues here)
+* Template loads now work for parent/child themes in Windows (thanks @matthewsoares)
+* Better method for removing 404 body class on manual redirects (thanks @mgmartel)
 
 = 0.15.5 =
 * Post formats: {{post.format}} !

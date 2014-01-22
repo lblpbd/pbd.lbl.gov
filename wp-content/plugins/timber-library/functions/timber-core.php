@@ -8,7 +8,9 @@ class TimberCore {
 		}
 		if (is_array($info)) {
 			foreach ($info as $key => $value) {
-				$this->$key = $value;
+				if(!empty($key)){
+					$this->$key = $value;
+				}
 			}
 		}
 	}
@@ -29,6 +31,12 @@ class TimberCore {
 			$this->_can_edit = true;
 		}
 		return $this->_can_edit;
+	}
+
+	function get_method_values(){
+		$ret = array();
+		$ret['can_edit'] = $this->can_edit();
+		return $ret;
 	}
 
 	//deprecated

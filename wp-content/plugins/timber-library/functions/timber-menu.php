@@ -18,16 +18,20 @@ class TimberMenu extends TimberCore {
             $menu_id = $this->get_menu_id_from_terms($slug);
         }
         if ($menu_id){
-            $menu = wp_get_nav_menu_items($menu_id);
-            $menu = self::order_children($menu);
-            $this->items = $menu;
-            $menu_info = wp_get_nav_menu_object($menu_id);
-            $this->import($menu_info);
-            $this->ID = $this->term_id;
+            $this->init($menu_id);
         } else {
             TimberHelper::error_log("Sorry, the menu you were looking for wasn't found ('".$slug."'). Here's what Timber did find:");
         }
         return null;
+    }
+
+    private function init($menu_id){
+        $menu = wp_get_nav_menu_items($menu_id);
+        $menu = self::order_children($menu);
+        $this->items = $menu;
+        $menu_info = wp_get_nav_menu_object($menu_id);
+        $this->import($menu_info);
+        $this->ID = $this->term_id;
     }
 
     private function get_menu_id_from_locations($slug, $locations){
@@ -101,6 +105,7 @@ class TimberMenu extends TimberCore {
 class TimberMenuItem extends TimberCore {
 
     var $children;
+    var $has_child_class = false;
 
     function __construct($data) {
         $this->import($data);
@@ -109,6 +114,12 @@ class TimberMenuItem extends TimberCore {
             $this->_name = $this->name;
         }
         $this->name = $this->name();
+        $this->add_class('menu-item-'.$this->ID);
+    }
+
+    function add_class($class_name){
+        $this->classes[] = $class_name;
+        $this->class .= ' '.$class_name;
     }
 
     function name() {
@@ -131,6 +142,9 @@ class TimberMenuItem extends TimberCore {
     }
 
     function add_child($item) {
+        if (!$this->has_child_class){
+            $this->add_class('menu-item-has-children');
+        }
         if (!isset($this->children)) {
             $this->children = array();
         }
@@ -148,20 +162,36 @@ class TimberMenuItem extends TimberCore {
         return false;
     }
 
+    function is_external(){
+        if ($this->type != 'custom'){
+            return false;
+        }
+        return TimberHelper::is_external($this->url);
+    }
+
     /* Aliases */
-    function link(){
+
+    public function children(){
+        return $this->get_children();
+    }
+
+    public function external(){
+        return $this->is_external();
+    }
+
+    public function link(){
         return $this->get_link();
     }
 
-    function path(){
+    public function path(){
         return $this->get_path();
     }
 
-    function permalink(){
+    public function permalink(){
         return $this->get_link();
     }
 
-    function get_permalink(){
+    public function get_permalink(){
         return $this->get_link();
     }
 }
