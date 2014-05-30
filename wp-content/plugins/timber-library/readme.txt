@@ -1,9 +1,9 @@
 === Timber ===
 Contributors: jarednova
 Tags: template engine, templates, twig
-Requires at least: 3.5
-Stable tag: 0.16.8
-Tested up to: 3.8.1
+Requires at least: 3.7
+Stable tag: 0.19.0
+Tested up to: 3.9
 PHP version: 5.3.0 or greater
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -34,12 +34,48 @@ Timber is great for any WordPress developer who cares about writing good, mainta
 
 #### Want to read more?
 * [Timber on WordPress.org](http://wordpress.org/plugins/timber-library/)
-* [Timber Overview on WP Mayor](http://www.wpmayor.com/articles/timber-templating-language-wordpress/)
+* [Timber Overview on Tidy Repo](http://www.wpmayor.com/articles/timber-templating-language-wordpress/)
 * ["What is WordPress Missing? A Template Language" on Torque](http://torquemag.io/what-is-wordpress-lacking-a-template-language/)
 
 
 
 == Changelog ==
+
+= 0.19.0 =
+* Reorganized dependencies into /vendor directories based on composer (thanks @mgmartel, @rarst, @bryanaka)
+* Fixed issues with image library deletion (thanks @thetmkay)
+* Fixed issues with sidebar output
+
+= 0.18.1 =
+* Dates now use date_i18n filter (thanks @jamesagreenleaf)
+* The twig |date filter now defaults to your WP Admin settings (thanks @jamesagreenleaf)
+* You can send Timber::$dirname an array to specify multiple locations of twig files within a theme
+* Load views from anywhere on the server (thanks @th3fallen)
+* Load twig files from anywhere on the server using an absolute path
+* Use another version of Twig if you have it loaded (thanks @ButlerPCnet)
+* more tests!
+
+= 0.18.0 =
+* BREAKING CHANGE ALERT wp_title no longer appends bloginfo('name') to end of string (thanks @aduth)
+* BREAKING CHANGE ALERT get_preview now respects <!-- more --> tag (thanks @jnweaver)
+* TimberHelper::transient is more reliable (thanks @mgmartel)
+* Secure urls in TimberImage if current page is served over SSL (thanks @mgmartel)
+* Re-wrote most of letterboxing functionality
+* Re-organized Helper functions
+
+= 0.17.2 =
+* TimberPost::children() now sorts by menu_order, title as WordPress core does (thanks @aduth)
+* Fixed an occaisonal warning (thanks @matthewsoares)
+* TimberImage::alt() now returns your image's alt tag info from WordPress (thanks @jnweaver)
+* In the router, non-404 headers are forced asap (thanks @mgmartel)
+* Router now accepts + signs in paths
+
+= 0.17.1 =
+* Hotfix on timber-admin error
+
+= 0.17.0 =
+* Now you can resize/crop images with positional preferences, thanks @mmikkel. Here are the docs: https://github.com/jarednova/timber/wiki/TimberImage#resize
+* Removed the Timber Starter Guide from the admin, a link to the GitHub wiki suffices.
 
 = 0.16.8 =
 * You can now retrieve prev/next posts within the same category (post.next('category').title, etc.). (thanks @slimndap)
