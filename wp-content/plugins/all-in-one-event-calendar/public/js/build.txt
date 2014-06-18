@@ -69,6 +69,9 @@ pages/admin_settings.js
 domReady.js
 external_libs/bootstrap/tab.js
 libs/utils.js
+scripts/setting/cache/cache_ajax_handlers.js
+scripts/setting/cache/cache_event_handlers.js
+external_libs/bootstrap/button.js
 external_libs/bootstrap/transition.js
 external_libs/bootstrap/collapse.js
 libs/collapse_helper.js
