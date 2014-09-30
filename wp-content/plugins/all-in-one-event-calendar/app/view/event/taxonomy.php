@@ -256,7 +256,7 @@ class Ai1ec_View_Event_Taxonomy extends Ai1ec_Base {
 			}
 
 			$html .= '<a ' . $data_type . ' class="' . $class .
-			' ai1ec-term-id-' . $category->term_id . '" ' .
+			' ai1ec-term-id-' . $category->term_id . ' p-category" ' .
 			$title . $color_style . 'href="' . $href->generate_href() . '">';
 
 			if ( $format === 'blocks' ) {

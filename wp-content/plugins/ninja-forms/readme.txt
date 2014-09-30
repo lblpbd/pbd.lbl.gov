@@ -1,9 +1,9 @@
 === Ninja Forms ===
 Contributors: kstover, jameslaws, daveshine, mordauk, bftrick, helgatheviking
 Tags: form, forms, contact form, custom form, form builder, form creator, form manager, form creation, contact forms, custom forms, forms builder, forms creator, forms manager, forms creation, form administration,
-Requires at least: 3.6
-Tested up to: 3.9
-Stable tag: 2.6.5
+Requires at least: 3.8
+Tested up to: 4.0
+Stable tag: 2.8.5
 License: GPLv2 or later
 
 Forms created with a simple drag and drop interface. Contact forms, Email collection forms, or any other form you want on your WordPress site.
@@ -72,27 +72,187 @@ Shortcodes have been re-implemented. They are used like so: [ninja_forms_display
 
 == Use ==
 
-For help and video tutorials, please visit our website: [Ninja Forms Documentation](http://ninjaforms.com/documentation/intro/)
+For help and video tutorials, please visit our website: [Ninja Forms Documentation](http://ninjaforms.com/documentation/)
 
 == Upgrade Notice ==
 
-= 2.6.5 (06/10/2014) =
-
-*Changes:*
-
-* Added a filter for setting which field types are shown the input limiter.
-* Changed the header( 'Location....') php function with wp_redirect().
+= 2.8.5 (23 September 2014 ) =
 
 *Bugs:*
 
-* Fixed a bug that could cause the required symbol to be added twice if the label position was set inside.
-* Wrapped the $post global in an if check to prevent errors on some WP pages.
+* Fixed a bug with notifications that could prevent notifciations from converting properly in some instances.
+* Fixed a bug with changing email message content via the filter.
+* Properly included minified JS files.
+
+*Security:*
+
+* Version 2.8 fixes a minor security issue that could allow non-admins and other forms to delete Ninja Forms. This won't affect all users, but we encourage everyone to update.
 
 == Requested Features ==
 
 If you have any feature requests, please feel free to visit [ninjaforms.com](http://ninjaforms.com) and let us know about it.
 
 == Changelog ==
+
+= 2.8.4 (17 September 2014 ) =
+
+*Changes:*
+
+* Moving reply to, cc, and bcc to an advanced settings section for email notifications.
+* Any field can now be inserted into the from name, address, to, subject, reply to, cc, and bcc fields.
+* Added a custom short code parser that will prevent other plugins from tampering with email and success message ninja forms short codes.
+
+*Bugs:*
+
+* Fixed an issue where short codes were being parsed in the admin.
+* Fixed a bug that could cause phantom emails to be sent to users who filled out forms.
+* Settings labels should now populate correctly upon activation.
+* New installs should not see upgrade notices.
+* Favourite fields can now be removed properly in all installations.
+* Fixed PHP notices.
+
+*Security:*
+
+* Version 2.8 fixes a minor security issue that could allow non-admins and other forms to delete Ninja Forms. This won't affect all users, but we encourage everyone to update.
+
+= 2.8.3 (17 September 2014) =
+
+*Bugs:*
+
+* Fixed a bug that could cause notification conversion to crash.
+
+*Security:*
+
+* Version 2.8 fixes a minor security issue that could allow non-admins and other forms to delete Ninja Forms. This won't affect all users, but we encourage everyone to update.
+
+= 2.8.2 (16 September 2014) =
+
+*Bugs:*
+
+* Fixed a bug that could cause emails to be sent to the user's email address, even if a notification wasn't active.
+* Fixed a bug that could prevent emails from being sent if the message was empty.
+* Fixed a bug with upgrades that caused submission conversion to fail.
+* Fixed PHP notices.
+
+*Security:*
+
+* Version 2.8 fixes a minor security issue that could allow non-admins and other forms to delete Ninja Forms. This won't affect all users, but we encourage everyone to update.
+
+*Changes:*
+
+* Added a filter for success message notifications: nf_success_msg.
+* Added a filter for CSV exports after labels have been added but before fields: nf_subs_csv_label_array_before_fields.
+* Deprecated the old version of the success message filter.
+
+= 2.8.1 (14 September 2014) =
+
+*Bugs:*
+
+* Fixed a bug that could cause emails to be sent to the user's email address, even if a notification wasn't active.
+
+= 2.8 (14 September 2014) =
+
+*Security:*
+
+* Version 2.8 fixes a minor security issue that could allow non-admins and other forms to delete Ninja Forms. This won't affect all users, but we encourage everyone to update. 
+
+*Features:*
+
+* New, simpler system for creating custom notifications.
+* Send any number of emails per form submission.
+* Easily redirect the user to a page or display a custom success message.
+
+*Changes:*
+
+* Changed the "Save Form Settings" button to "Save."
+
+*Bugs:*
+
+* Fixed PHP notices.
+
+= 2.7.7 (19 August 2014) =
+
+*Bugs:*
+
+* Fixing a bug with editing submissions with specific field combinations.
+* Submission CSS should now only enqueue on the submission page.
+* Fixed a bug with the submissions permissions filter. It should now function properly.
+* Fixed a bug with some servers caused by calling the set_time_limit() function
+* The [nf_sub_seq_num] shortcode should now always function properly.
+* Fixed an invalid argument error when viewing a the submissions table.
+* Rich Text Editors should now render properly when they are added to a form.
+
+*Changes:*
+
+* Added a new filter to the admin menu capabilities. Deprecated older versions.
+
+= 2.7.6 (12 August 2014) =
+
+*Bugs:*
+
+* On the submissions table, the filter will now use the earliest date as the begin date.
+
+*Changes:*
+
+* Added the ability to download all submissions for a particular form.
+* Added a step processor that can be extended and used by developers.
+* Added new extensions to the add-ons page.
+
+= 2.7.5 (09 August 2014) =
+
+*Bugs:*
+
+* Fixed a bug with success messages not being displayed for AJAX submissions.
+
+= 2.7.4 (08 August 2014) =
+
+*Bugs:*
+
+* Fixed HTML breaking issues with the Text field type when something other than div is selected
+* Fixed a bug that could cause forms to stop working on Windows (IIS) servers.
+* Forms without errors or success messages should no longer see the "response" message div.
+
+*Changes:*
+
+* Added Portuguese translation files.
+* Added Dutch translation files.
+
+= 2.7.3 (29 July 2014) =
+
+*Bugs:*
+
+* Fixed a bug that caused the text elements to be output with encoded html tags rather than the tags themselves.
+* Fixed a bug that caused empty CSV files to be emailed to the admin.
+
+*Changes:*
+
+* List item labels can now contain HTML.
+
+= 2.7.2 (25 July 2014) =
+
+*Bugs:*
+
+* Fixed an issue that could cause the submission values to appear as a widget on the submission edit screen.
+* Fixed a bug that could cause a direct download if the "send CSV attachment" was checked.
+
+= 2.7.1 (25 July 2014) =
+
+*Bugs:*
+
+* Fixed an issue with older versions of PHP and the round() function.
+
+= 2.7 (24 July 2014) =
+
+*Changes:*
+
+* Submissions are now stored in a new database, making them easier to search, edit, and display.
+* There are new methods for interacting with submissions, which can be found [here](http://ninjaforms.com/documentation/developer-api/submissions/).
+* We're very excited about this new direction for Ninja Forms submissions, and we hope you enjoy using the new submissions system.
+* See the plugin welcome screen for more details.
+
+*Bugs:*
+
+* Fixed several bugs.
 
 = 2.6.5 (06/10/2014) =
 

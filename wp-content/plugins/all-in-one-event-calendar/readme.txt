@@ -4,8 +4,8 @@ Tags: calendar, events, ics, ics feed, wordpress ical importer, google
 calendar, ical, iCalendar, all-in-one, events sync, events widget,
 calendar widget
 Requires WorPress at least: 3.5
-Tested up to: 3.9.1
-Stable tag: 2.0.13
+Tested up to: 4.0
+Stable tag: 2.1.5
 License: GNU General Public License, version 3 (GPL-3.0)
 
 A calendar system with many views, upcoming events widget, color-coded
@@ -142,7 +142,7 @@ http://vimeo.com/55904173
 
 == Frequently Asked Questions ==
 
-[**See the FAQ on our Support Page »**](http://support.time.ly/faq/)
+[**Learn more with our detailed documentation »**](http://time.ly/support/)
 
 = Shortcodes =
 
@@ -171,6 +171,76 @@ http://vimeo.com/55904173
 **[ai1ec post_id="1, 2"]**
 
 == Changelog ==
+
+= Version 2.1.5 =
+* Confirmed compatibility with WordPress 4.0 and added new Timely icon
+
+= Version 2.1.4 =
+* Improved context awareness of cache clean-up function to protect
+from accidentally removing files that do not belong to the plugin
+
+= Version 2.1.3 =
+* Added possibility to keep old events during ICS feeds update
+* Made subscribe dropdown button mobile friendly
+* Implemented microformats 2 improving SEO and reducing theme and plugin
+conflicts 
+* Improved compatibility with JetPack - sharing elements no longer
+appear on empty pop-over elements
+* Enabled translation of some previously untranslatable strings
+* Made it possible to translate view names
+* Fixed ICS import which was failing due to unrecognized timezones for
+excluded dates
+* Fixed pagination in Agenda view
+* Fixed `the_title` filter to only add hEvent class names to our post
+titles
+* Improved cache behavior - no longer stressing when write to file cache
+fails
+* Improved cache fall-back to database when faster means are unavailable
+* Fixed potential error which could have prevented settings from being
+saved on some systems
+* Fixed JetPack compatibility
+* Fixed widget pop-up which was displaying event sharing information in
+some cases
+
+= Version 2.1.2 =
+* Fixed issue where settings weren't saving in some cases
+* Fixed issue where permalinks for events weren't working until "save"
+  was clicked in permalinks settings page
+* Fixed issue where excluded dates from ICS feeds weren't correctly
+  imported
+
+= Version 2.1.1 =
+* Added ability to select mobile specific default views
+* Improved filter bar layout for mobile rendering
+* Improved CSS load times by using cached CSS file when possible
+* Changed single event alias from /ai1ec_event to /event
+* Allow multiple calendars on a single page
+* Allow developers to modify values before they are passed to templates
+* Improved CSS compiling decreasing page load times
+* When file cache is not available CSS is stored in database and output in
+  <style> tag directly for  increased performance and to mitigate potential
+  security risks
+* Introduced use of microformats for improved SEO
+* Improved error handling on ICS feeds page (more extensive reporting,
+  clear message on allowed URL formats)
+* Improved exclude dates selector widget and exclude dates overview in
+  Dashboard
+* Improved information displayed when links for tags/categories are
+  clicked
+* Removed duplication of Publish button
+* Allow the filter menu to be affixed to the window
+* Allow time zone selection during event creation
+* Improved display of robots.txt field in Settings as well as
+  robots.txt handling
+* Fixed import/export of events with no end time or date
+* Fixed todays date marking in Agenda-like views
+* Fixed expand map link
+* Removed urls from print view
+* Restored address autocomplete region biasing function
+* Fixed fatal error preventing CSS compilation
+* Fixed section 508 compatibility
+* Improved security by preventing XSRF on forms and links where
+  applicable
 
 = Version 2.0.13 =
 * Fixed week view where events spanning multiple days were incorrectly
