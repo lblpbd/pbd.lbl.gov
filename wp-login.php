@@ -571,6 +571,9 @@ case 'rp' :
 	if ( isset( $_COOKIE[ $rp_cookie ] ) && 0 < strpos( $_COOKIE[ $rp_cookie ], ':' ) ) {
 		list( $rp_login, $rp_key ) = explode( ':', wp_unslash( $_COOKIE[ $rp_cookie ] ), 2 );
 		$user = check_password_reset_key( $rp_key, $rp_login );
+		if ( isset( $_POST['pass1'] ) && ! hash_equals( $rp_key, $_POST['rp_key'] ) ) {
+			$user = false;
+		}
 	} else {
 		$user = false;
 	}
@@ -613,7 +616,6 @@ case 'rp' :
 	login_header(__('Reset Password'), '<p class="message reset-pass">' . __('Enter your new password below.') . '</p>', $errors );
 
 ?>
-
 <form name="resetpassform" id="resetpassform" action="<?php echo esc_url( network_site_url( 'wp-login.php?action=resetpass', 'login_post' ) ); ?>" method="post" autocomplete="off">
 	<input type="hidden" id="user_login" value="<?php echo esc_attr( $rp_login ); ?>" autocomplete="off" />
 
@@ -641,6 +643,7 @@ case 'rp' :
 	 */
 	do_action( 'resetpass_form', $user );
 	?>
+	<input type="hidden" name="rp_key" value="<?php echo esc_attr( $rp_key ); ?>" />
 	<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e('Reset Password'); ?>" /></p>
 </form>
 
