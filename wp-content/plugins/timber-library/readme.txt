@@ -2,8 +2,8 @@
 Contributors: jarednova
 Tags: template engine, templates, twig
 Requires at least: 3.7
-Stable tag: 0.20.7
-Tested up to: 4.0
+Stable tag: 0.21.1
+Tested up to: 4.1
 PHP version: 5.3.0 or greater
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,32 @@ Timber is great for any WordPress developer who cares about writing good, mainta
 
 == Changelog ==
 
+= 0.21.1 =
+* Fixed capitalization problem for WP.org version
+
+= 0.21.0 =
+* Routes is now its own independent repo
+* Timber Starter Theme is now its own independent repo
+* Improved loading of files (thanks @mgmartel)
+* Fixed some errors with TimberImages (thanks @imranismail)
+
+= 0.20.10 =
+* Resolved lingering composer issues (thanks @austinpray, @lucasmichot)
+* You can now access `{{comment.status}}` when working with comments (thanks @simonmilz)
+* Better support for alternate setups with uploads directory (thanks @xavierpriour)
+* Major clean-up of image-handling classes (thanks @xavierpriour)
+* Starter theme now follows WP coding standards (thanks @kuus)
+* A slew of other bugs and clean-up (thanks @JeyKeu, @quinn and @jaredNova)
+
+= 0.20.9 =
+* Twig goes from 1.6.2 to 1.6.3 (thanks @fabpot)
+* Some clean-up items on Menus (thanks @oskarrough)
+* Simplified composer installation (thanks @lucasmichot)
+
+= 0.20.8 =
+* Fixed some Twig deprecation (thanks @alexlrobertson)
+* Support for {{img.src|retina}} filter (@jarednova)
+
 = 0.20.7 =
 * Cleaned-up logic for {{post.next}} and {{post.prev}} (thanks @alexlrobertson)
 * Simplifiying internals of TimberCore, TimberPost (thanks @alexlrobertson)
@@ -65,7 +91,7 @@ Timber is great for any WordPress developer who cares about writing good, mainta
 = 0.20.4 =
 * Fixed issue with Timber::get_posts and Timber::query_posts using numberposts in args
 
-= 0.20.3 = 
+= 0.20.3 =
 * Fixed some issues with linking to menu items with a hash
 
 = 0.20.2 =

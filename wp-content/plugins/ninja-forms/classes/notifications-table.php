@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /*************************** LOAD THE BASE CLASS *******************************
  *******************************************************************************
@@ -86,6 +86,7 @@ class NF_Notifications_List_Table extends WP_List_Table {
     public function column_default($item, $column_name){
         switch($column_name){
             case 'type':
+                return Ninja_Forms()->notification( $item['id'] )->type_name();
             case 'date_updated':
                 return $item[$column_name];
             default:
@@ -171,10 +172,9 @@ class NF_Notifications_List_Table extends WP_List_Table {
     public function get_columns(){
         $columns = array(
             'cb'            => '<input type="checkbox" />', //Render a checkbox instead of text
-            'name'          => 'Name',
-            'type'          => 'Type',
-            // 'stats'         => 'Stats',
-            'date_updated'  => 'Date Updated'
+            'name'          => __( 'Name', 'ninja-forms' ),
+            'type'          => __( 'Type', 'ninja-forms' ),
+            'date_updated'  => __( 'Date Updated', 'ninja-forms' ),
         );
         return $columns;
     }

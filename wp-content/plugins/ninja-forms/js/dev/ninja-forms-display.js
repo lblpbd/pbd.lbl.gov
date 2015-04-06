@@ -43,9 +43,7 @@ jQuery(document).ready(function(jQuery) {
 	}
 
 	if( jQuery.fn.datepicker ){
-		jQuery(".ninja-forms-datepicker").datepicker({
-			dateFormat: ninja_forms_settings.date_format
-		});
+		jQuery(".ninja-forms-datepicker").datepicker( ninja_forms_settings.datepicker_args );
 	}
 
 	if( jQuery.fn.autoNumeric ){
@@ -120,7 +118,12 @@ jQuery(document).ready(function(jQuery) {
 	jQuery(".ninja-forms-form").each(function(){
 		var form_id = this.id.replace("ninja_forms_form_", "");
 		var settings = window['ninja_forms_form_' + form_id + '_settings'];
-		ajax = settings.ajax
+		if ( typeof settings != 'undefined' ) {
+			ajax = settings.ajax
+		} else {
+			ajax = 0;
+		}
+		
 		if(ajax == 1){
 			var options = {
             beforeSerialize: function($form, add_product_form_options) {
@@ -831,6 +834,9 @@ function ninja_forms_toggle_login_register(form_type, form_id) {
 
 function ninja_forms_get_form_id(element){
 	var form_id = jQuery(element).closest('form').prop("id");
+	if ( 'undefined' === typeof form_id ) {
+		return false;
+	}
 	form_id = form_id.replace("ninja_forms_form_", "");
 	if(form_id == '' || form_id == 'ninja_forms_admin'){
 		form_id = jQuery("#_form_id").val();

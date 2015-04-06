@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 function ninja_forms_register_field_hiddenbox(){
 	$args = array(
 		'name' => __( 'Hidden Field' , 'ninja-forms' ),
@@ -116,10 +116,10 @@ function ninja_forms_field_hidden_edit($field_id, $data){
 	<?php
 }
 
-function ninja_forms_field_hidden_display($field_id, $data){
+function ninja_forms_field_hidden_display( $field_id, $data, $form_id = '' ){
 	global $current_user;
 
-	$field_class = ninja_forms_get_field_class($field_id);
+	$field_class = ninja_forms_get_field_class( $field_id, $form_id );
 	if(isset($data['default_value'])){
 		$default_value = $data['default_value'];
 	}else{
