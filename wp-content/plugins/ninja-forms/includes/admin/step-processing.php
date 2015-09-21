@@ -33,8 +33,15 @@ function nf_step_processing_css() {
  * @return void
  */
 function nf_step_processing_js() {
-	wp_enqueue_script( 'nf-processing',
-		NF_PLUGIN_URL . 'assets/js/min/step-processing.min.js',
+    if ( defined( 'NINJA_FORMS_JS_DEBUG' ) && NINJA_FORMS_JS_DEBUG ) {
+        $suffix = '';
+        $src = 'dev';
+    } else {
+        $suffix = '.min';
+        $src = 'min';
+    }
+    wp_enqueue_script( 'nf-processing',
+        NF_PLUGIN_URL . 'assets/js/' . $src . '/step-processing' . $suffix . '.js',
 		array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-progressbar' ) );
 	$step_labels = apply_filters( 'nf_step_processing_labels', array(
 		'Lacing Our Tabis',
@@ -68,7 +75,7 @@ function nf_step_processing_js() {
  * @return void
  */
 function nf_output_step_processing_page() {
-	$page_title = isset ( $_REQUEST['title'] ) ? urldecode( $_REQUEST['title'] ) : __( 'Ninja Forms - Processing', 'ninja-forms' );
+	$page_title = isset ( $_REQUEST['title'] ) ? urldecode( esc_html ( $_REQUEST['title'] ) ) : __( 'Ninja Forms - Processing', 'ninja-forms' );
 	?>
 	<style>
 		.ui-progressbar {
@@ -103,7 +110,7 @@ function nf_output_step_processing_page() {
 		if ( isset ( $_REQUEST['action'] ) && ! empty ( $_REQUEST['action'] ) ) {
 			$action = __( 'Loading...', 'ninja-forms' );
 			?>
-			var nfProcessingAction = 'nf_<?php echo $_REQUEST['action']; ?>';
+			var nfProcessingAction = 'nf_<?php echo esc_html( $_REQUEST['action'] ); ?>';
 			<?php
 		} else {
 			$action = __( 'No Action Specified...', 'ninja-forms' );
@@ -113,7 +120,7 @@ function nf_output_step_processing_page() {
 		}
 
 		$tmp_array = array();
-		$url_params = parse_url( add_query_arg( array() ) );
+		$url_params = parse_url( esc_url_raw( add_query_arg( array() ) ) );
 		$query = $url_params['query'];
 		$query = parse_str( $query, $tmp_array );
 		unset ( $tmp_array['action'] );
@@ -139,5 +146,15 @@ function nf_output_step_processing_page() {
 				</div>
 			</div>
 	</div>
+
+    <!-- DISPLAY ERRORS -->
+    <div id="nf-upgrade-errors" class="hidden nf-upgrade-errors">
+
+        <h3 class="nf-upgrade-errors-header">Error Log</h3>
+
+        <ul class="nf-upgrade-errors-list"></ul>
+
+    </div>
+
 	<?php
 }

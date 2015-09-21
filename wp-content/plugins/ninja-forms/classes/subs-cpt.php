@@ -108,7 +108,7 @@ class NF_Subs_CPT {
 		$name = _x( 'Submissions', 'post type general name', 'ninja-forms' );
 
 		if ( ! empty ( $_REQUEST['form_id'] ) ) {
-			$form_title = Ninja_Forms()->form( $_REQUEST['form_id'] )->get_setting( 'form_title' );
+			$form_title = Ninja_Forms()->form( absint( $_REQUEST['form_id'] ) )->get_setting( 'form_title' );
 			$name =$name . ' - ' . $form_title;
 		}
 
@@ -171,9 +171,9 @@ class NF_Subs_CPT {
 			return false;
 
 		if ( isset ( $_REQUEST['form_id'] ) ) {
-			$form_id = $_REQUEST['form_id'];
+			$form_id = absint( $_REQUEST['form_id'] );
 		} else if ( isset ( $_REQUEST['post'] ) ) {
-			$form_id = Ninja_Forms()->sub( $_REQUEST['post'] )->form_id;
+			$form_id = Ninja_Forms()->sub( absint( $_REQUEST['post'] ) )->form_id;
 		} else {
 			$form_id = '';
 		}
@@ -215,7 +215,7 @@ class NF_Subs_CPT {
 		if ( ( $pagenow != 'edit.php' && $pagenow != 'post.php' ) || $typenow != 'nf_sub' )
 			return false;
 
-		$form_id = isset ( $_REQUEST['form_id'] ) ? $_REQUEST['form_id'] : '';
+		$form_id = isset ( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : '';
 
 		if ( defined( 'NINJA_FORMS_JS_DEBUG' ) && NINJA_FORMS_JS_DEBUG ) {
 			$suffix = '';
@@ -386,8 +386,8 @@ class NF_Subs_CPT {
 				if ( !isset ( $_GET['post_status'] ) || $_GET['post_status'] == 'all' ) {
 					echo '<div class="row-actions">';
 					do_action( 'nf_sub_table_before_row_actions', $sub_id, $column );
-					echo '<span class="edit"><a href="post.php?post=' . $sub_id . '&action=edit&ref=' . urlencode( add_query_arg( array() ) ) . '" title="' . __( 'Edit this item', 'ninja-forms' ) . '">' . __( 'Edit', 'ninja-forms' ) . '</a> | </span> 
-						<span class="edit"><a href="' . add_query_arg( array( 'export_single' => $sub_id ) ) . '" title="' . __( 'Export this item', 'ninja-forms' ) . '">' . __( 'Export', 'ninja-forms' ) . '</a> | </span>';
+					echo '<span class="edit"><a href="post.php?post=' . $sub_id . '&action=edit&ref=' . urlencode( esc_url(  add_query_arg( array() ) ) ) . '" title="' . __( 'Edit this item', 'ninja-forms' ) . '">' . __( 'Edit', 'ninja-forms' ) . '</a> | </span> 
+						<span class="edit"><a href="' . esc_url( add_query_arg( array( 'export_single' => $sub_id ) ) ) . '" title="' . __( 'Export this item', 'ninja-forms' ) . '">' . __( 'Export', 'ninja-forms' ) . '</a> | </span>';
 					$row_actions = apply_filters( 'nf_sub_table_row_actions', array(), $sub_id, $form_id );
 					if ( ! empty( $row_actions ) ) {
 						echo implode(" | ", $row_actions);
@@ -700,9 +700,10 @@ class NF_Subs_CPT {
 						<?php
 					}
 
-					if ( isset ( $_REQUEST['form_id'] ) && $_REQUEST['form_id'] != '' ) {
+					if ( isset ( $_REQUEST['form_id'] ) && ! empty ( $_REQUEST['form_id'] ) ) {
 						$redirect = urlencode( remove_query_arg( array( 'download_all', 'download_file' ) ) );
-						$url = admin_url( 'admin.php?page=nf-processing&action=download_all_subs&form_id=' . $_REQUEST['form_id'] . '&redirect=' . $redirect );
+						$url = admin_url( 'admin.php?page=nf-processing&action=download_all_subs&form_id=' . absint( $_REQUEST['form_id'] ) . '&redirect=' . $redirect );
+						$url = esc_url( $url );
 						?>
 						var button = '<a href="<?php echo $url; ?>" class="button-secondary nf-download-all"><?php echo __( 'Download All Submissions', 'ninja-forms' ); ?></a>';
 						jQuery( '#doaction2' ).after( button );
@@ -710,7 +711,7 @@ class NF_Subs_CPT {
 					}
 					
 					if ( isset ( $_REQUEST['download_all'] ) && $_REQUEST['download_all'] != '' ) {
-						$redirect = add_query_arg( array( 'download_file' => $_REQUEST['download_all'] ) );
+						$redirect = esc_url_raw( add_query_arg( array( 'download_file' => esc_html( $_REQUEST['download_all'] ) ) ) );
 						$redirect = remove_query_arg( array( 'download_all' ), $redirect );
 						?>
 						document.location.href = "<?php echo $redirect; ?>";
@@ -745,9 +746,9 @@ class NF_Subs_CPT {
 				$active = 'trash';
 			}
 
-			$all_url = add_query_arg( array( 'post_status' => 'all' ) );
+			$all_url = esc_url_raw( add_query_arg( array( 'post_status' => 'all' ) ) );
 			$all_url = remove_query_arg( 's', $all_url );
-			$trash_url = add_query_arg( array( 'post_status' => 'trash' ) );
+			$trash_url = esc_url_raw( add_query_arg( array( 'post_status' => 'trash' ) ) );
 			$trash_url = remove_query_arg( 's', $trash_url );
 			if ( isset ( $_GET['form_id'] ) ) {
 				$trashed_sub_count = nf_get_sub_count( $_GET['form_id'], 'trash' );	
@@ -789,7 +790,7 @@ class NF_Subs_CPT {
 			<?php			
 		} else if ( $typenow == 'nf_sub' && $pagenow == 'post.php' ) {
 			if ( isset ( $_REQUEST['ref'] ) ) {
-				$back_url = $_REQUEST['ref'];
+				$back_url = esc_url_raw( $_REQUEST['ref'] );
 			} else {
 				$back_url = get_transient( 'nf_sub_edit_ref' );
 			}
@@ -880,7 +881,7 @@ class NF_Subs_CPT {
 		$fields = Ninja_Forms()->form( $this->form_id )->fields;
 		
 		if ( isset ( $_REQUEST['ref'] ) ) {
-			$ref = $_REQUEST['ref'];
+			$ref = esc_url_raw( $_REQUEST['ref'] );
 		} else if ( get_transient( 'nf_sub_edit_ref' ) ) {
 			$ref = get_transient( 'nf_sub_edit_ref' );
 		} else {
@@ -1075,7 +1076,7 @@ class NF_Subs_CPT {
 	    	Ninja_Forms()->sub( $sub_id )->update_field( $field_id, $user_value );
 	    }
 
-	    set_transient( 'nf_sub_edit_ref', $_REQUEST['ref'] );
+	    set_transient( 'nf_sub_edit_ref', esc_url_raw( $_REQUEST['ref'] ) );
 	}
 
 	/**
@@ -1094,7 +1095,7 @@ class NF_Subs_CPT {
 		// Grab our current user.
 		$user = wp_get_current_user();
 		// Grab our form id.
-		$form_id = $_REQUEST['form_id'];
+		$form_id = absint( $_REQUEST['form_id'] );
 		// Get the columns that should be hidden for this form ID.
 		$hidden_columns = get_user_option( 'manageedit-nf_subcolumnshidden-form-' . $form_id );
 		
@@ -1126,8 +1127,8 @@ class NF_Subs_CPT {
 		// Grab our current user.
 		$user = wp_get_current_user();
 		// Grab our form id.
-		$form_id = $_REQUEST['form_id'];
-		$hidden = isset( $_POST['hidden'] ) ? explode( ',', $_POST['hidden'] ) : array();
+		$form_id = absint( $_REQUEST['form_id'] );
+		$hidden = isset( $_POST['hidden'] ) ? explode( ',', esc_html( $_POST['hidden'] ) ) : array();
 		$hidden = array_filter( $hidden );
 		update_user_option( $user->ID, 'manageedit-nf_subcolumnshidden-form-' . $form_id, $hidden, true );
 		die();
@@ -1163,14 +1164,15 @@ class NF_Subs_CPT {
 			return false;
 
 		if ( isset ( $_REQUEST['export_single'] ) && ! empty( $_REQUEST['export_single'] ) )
-			Ninja_Forms()->sub( $_REQUEST['export_single'] )->export();
+			Ninja_Forms()->sub( esc_html( $_REQUEST['export_single'] ) )->export();
 
-		if ( ( isset ( $_REQUEST['action'] ) && $_REQUEST['action'] == 'export' ) || ( isset ( $_REQUEST['action2'] ) && $_REQUEST['action2'] == 'export' ) )
-			Ninja_Forms()->subs()->export( $_REQUEST['post'] );
+		if ( ( isset ( $_REQUEST['action'] ) && $_REQUEST['action'] == 'export' ) || ( isset ( $_REQUEST['action2'] ) && $_REQUEST['action2'] == 'export' ) ) {
+			Ninja_Forms()->subs()->export( ninja_forms_esc_html_deep( $_REQUEST['post'] ) );
+		}
 
 		if ( isset ( $_REQUEST['download_file'] ) && ! empty( $_REQUEST['download_file'] ) ) {
 			// Open our download all file
-			$filename = $_REQUEST['download_file'];
+			$filename = esc_html( $_REQUEST['download_file'] );
 			
 			$upload_dir = wp_upload_dir();
 
@@ -1179,14 +1181,14 @@ class NF_Subs_CPT {
 			if ( file_exists( $file_path ) ) {
 				$myfile = file_get_contents ( $file_path );
 			} else {
-				$redirect = remove_query_arg( array( 'download_file', 'download_all' ) );
+				$redirect = esc_url_raw( remove_query_arg( array( 'download_file', 'download_all' ) ) );
 				wp_redirect( $redirect );
 				die();
 			}
 			
 			unlink( $file_path );
 
-			$form_name = Ninja_Forms()->form( $_REQUEST['form_id'] )->get_setting( 'form_title' );
+			$form_name = Ninja_Forms()->form( absint( $_REQUEST['form_id'] ) )->get_setting( 'form_title' );
 			$form_name = sanitize_title( $form_name );
 
 			$today = date( 'Y-m-d', current_time( 'timestamp' ) );

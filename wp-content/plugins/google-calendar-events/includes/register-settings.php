@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.0.0
  */
 function gce_register_settings() {
-	
+
 	$gce_settings = array(
 
 		/* General Settings */
@@ -36,20 +36,22 @@ function gce_register_settings() {
 			),
 			'always_enqueue' => array(
 				'id'   => 'always_enqueue',
-				'name' => __( 'Always Enqueue Scripts & Styles', 'sc' ),
-				'desc' => __( sprintf( 'Enqueue this plugin\'s scripts and styles on every post and page. Useful if using shortcodes in widgets or other non-standard locations.' ), 'gce' ),
+				'name' => __( 'Always Enqueue Scripts & Styles', 'gce' ),
+				'desc' => __( 'Enqueue this plugin\'s scripts and styles on every post and page.', 'gce' ) . '<br/>' .
+				          '<p class="description">' . __( 'Useful if using shortcodes in widgets or other non-standard locations.', 'gce' ) . '</p>',
 				'type' => 'checkbox'
 			),
 			'disable_css' => array(
 				'id'   => 'disable_css',
-				'name' => __( 'Disable Plugin CSS', 'sc' ),
+				'name' => __( 'Disable Plugin CSS', 'gce' ),
 				'desc' => __( "If this option is checked, this plugin's CSS file will not be referenced.", 'gce' ),
 				'type' => 'checkbox'
 			),
 			'save_settings' => array(
 				'id'   => 'save_settings',
 				'name' => __( 'Save Settings', 'gce' ),
-				'desc' => __( 'Save your settings when uninstalling this plugin. Useful when upgrading or re-installing.', 'gce' ),
+				'desc' => __( 'Save your settings when uninstalling this plugin.', 'gce' ) . '<br/>' .
+				          '<p class="description">' . __( 'Useful when upgrading or re-installing.', 'gce' ) . '</p>',
 				'type' => 'checkbox'
 			)
 		)
@@ -116,9 +118,9 @@ function gce_get_settings_field_args( $option, $section ) {
 
 /*
  * Single checkbox callback function
- * 
+ *
  * @since 2.0.0
- * 
+ *
  */
 function gce_checkbox_callback( $args ) {
 	global $gce_options;
@@ -137,9 +139,9 @@ function gce_checkbox_callback( $args ) {
  * Textbox callback function
  * Valid built-in size CSS class values:
  * small-text, regular-text, large-text
- * 
+ *
  * @since 2.1.0
- * 
+ *
  */
 function gce_text_callback( $args ) {
 	global $gce_options;
@@ -162,20 +164,19 @@ function gce_text_callback( $args ) {
 
 /*
  * Function we can use to sanitize the input data and return it when saving options
- * 
+ *
  * @since 2.0.0
- * 
+ *
  */
 function gce_settings_sanitize( $input ) {
-	//add_settings_error( 'gce-notices', '', '', '' );
-	return $input;
+	return gce_sanitize_input( $input, 'sanitize_text_field' );
 }
 
 /*
  *  Default callback function if correct one does not exist
- * 
+ *
  * @since 2.0.0
- * 
+ *
  */
 function gce_missing_callback( $args ) {
 	printf( __( 'The callback function used for the <strong>%s</strong> setting is missing.', 'gce' ), $args['id'] );
@@ -183,24 +184,24 @@ function gce_missing_callback( $args ) {
 
 /*
  * Function used to return an array of all of the plugin settings
- * 
+ *
  * @since 2.0.0
- * 
+ *
  */
 function gce_get_settings() {
 
 	// Set default settings
 	// If this is the first time running we need to set the defaults
 	if ( ! get_option( 'gce_upgrade_has_run' ) ) {
-		
+
 		$general = get_option( 'gce_settings_general' );
-		
+
 		$general['save_settings']      = 1;
 		$general['always_enqueue']     = 1;
-		
+
 		update_option( 'gce_settings_general', $general );
 	}
-	
+
 	$general_settings = is_array( get_option( 'gce_settings_general' ) ) ? get_option( 'gce_settings_general' )  : array();
 
 	return $general_settings;
