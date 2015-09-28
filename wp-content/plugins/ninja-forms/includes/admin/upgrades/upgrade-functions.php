@@ -13,7 +13,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * DEPRECATED - Display Upgrade Notices
+ * Display Upgrade Notices
  *
  * @since 2.7
  * @return void
@@ -62,7 +62,7 @@ function nf_show_upgrade_notices() {
 	if ( $upgrade_notice != 'closed' ) {
 		printf(
 			'<div class="update-nag"><p>' . __( 'Thank you for updating to version 2.7 of Ninja Forms. Please update any Ninja Forms extensions from ', 'ninja-forms' ) . '<a href="http://ninjaforms.com/your-account/purchases/"</a>ninjaforms.com</a>. <a href="%s">Dismiss this notice</a></p></div>',
-			esc_url( add_query_arg( array( 'nf_action' => 'dismiss_upgrade_notice' ) ) )
+			add_query_arg( array( 'nf_action' => 'dismiss_upgrade_notice' ) )
 		);
 	}
 
@@ -83,9 +83,9 @@ function nf_show_upgrade_notices() {
 			'<a href="' . admin_url( 'index.php?page=nf-processing&action=convert_forms&title=' . $title ) . '">', '</a>'
 		);
 	}
-
+	
 }
-//add_action( 'admin_notices', 'nf_show_upgrade_notices' );
+add_action( 'admin_notices', 'nf_show_upgrade_notices' );
 
 /**
  * Triggers all upgrade functions
@@ -205,7 +205,7 @@ add_action( 'nf_upgrade_subs_to_cpt', 'nf_v27_upgrade_subs_to_cpt' );
  */
 function nf_dismiss_upgrade_notice() {
 	update_option( 'nf_upgrade_notice', 'closed' );
-	wp_redirect( esc_url_raw( remove_query_arg( 'nf_action' ) ) );
+	wp_redirect( remove_query_arg( 'nf_action' ) );
 	exit;
 }
 
@@ -373,8 +373,9 @@ function nf_29_update_all_form_settings_check() {
 
 	if ( $forms_conversion_complete )
 		return false;
-
-	$url = admin_url( 'index.php?page=nf-upgrade-handler' );
+	
+	$title = urlencode( __( 'Updating Form Database', 'ninja-forms' ) );
+	$url = admin_url( 'index.php?page=nf-processing&action=convert_forms&title=' . $title );
 	
 	?>
 	<script type="text/javascript">

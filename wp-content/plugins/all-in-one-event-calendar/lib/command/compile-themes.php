@@ -17,7 +17,8 @@ class Ai1ec_Command_Compile_Themes extends Ai1ec_Command {
 	public function is_this_to_execute() {
 		return (
 			AI1EC_DEBUG &&
-			isset( $_GET['ai1ec_recompile_templates'] )
+			isset( $_GET['ai1ec_recompile_templates'] ) &&
+			$_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']
 		);
 	}
 	

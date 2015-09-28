@@ -75,14 +75,10 @@ abstract class Ai1ec_Html_Element_Settings extends Ai1ec_Base
 				$render = $condition;
 			} else {
 				$callback = explode( ':', $this->_args['renderer']['condition'] );
-				try {
-					$render = $this->_registry->dispatch(
-						$callback[0],
-						$callback[1]
-					);
-				} catch (Ai1ec_Bootstrap_Exception $exception) {
-					$render = '';
-				}
+				$render   = $this->_registry->dispatch(
+					$callback[0],
+					$callback[1]
+				);
 			}
 			if ( ! $render ) {
 				return '';

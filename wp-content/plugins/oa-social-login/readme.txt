@@ -2,8 +2,8 @@
 Contributors: ClaudeSchlesser
 Tags: social login, social connect, facebook, linkedin, livejournal, google, yahoo, twitter, openid, paypal, google, instagram, widget, plugin, social network login, comments
 Requires at least: 3.0
-Tested up to: 4.3.1
-Stable tag: 5.0
+Tested up to: 3.9.1
+Stable tag: 4.6
 
 Allow your visitors to comment and login with social networks like Twitter, Facebook, Paypal, LinkedIn, Instagram, OpenID, VKontakte, Google, Yahoo
 
@@ -30,7 +30,6 @@ login and register with 25+ Social Networks like for example Facebook, Twitter, 
 <strong>Select the Social Networks/Providers:</strong>
 <ul>
  <li>Amazon</li>
- <li>Battle.net</li>
  <li>Blogger</li>
  <li>Disqus</li>
  <li>Facebook</li>
@@ -64,7 +63,7 @@ Our users love it! Check out the <a href="http://wordpress.org/extend/plugins/oa
 
 The Social Login Plugin is maintained by <a href="http://www.oneall.com">OneAll</a>, a technology company offering a set of web-delivered
 tools and services for establishing and optimizing a site's connection with social networks and identity providers such as Facebook, Twitter, 
-Google, Yahoo!, LinkedIn, Paypal, Instagram amongst others.
+Google, Yahoo!, LinkedIn, Paypal, Hyves amongst others.
 
 == Installation ==
 
@@ -78,7 +77,9 @@ The social network APIs are constantly changing and being updated. We monitor th
 update our APIs, so that you can be sure that Social Login will always run smoothly and with the most up-to-date 
 API calls. 
 
-In order to enable the plugin you must connect with the OneAll API and create a free account at https://app.oneall.com
+In order to enable the plugin your therefore have to connect with the OneAll API and you need to create a free 
+account at https://app.oneall.com
+
 
 == Frequently Asked Questions ==
 
@@ -133,14 +134,6 @@ http://docs.oneall.com/plugins/guide/social-login-wordpress/
 5. **Login** - Login formular with small buttons (Social Network Buttons are included)
 
 == Changelog ==
-
-= 5.0 =
-* Social Network "Battle.net" added
-* Social Link Hooks/Nonce added
-* WooCommerce Actions added
-* Login/Registration URL filters added
-* Cache bug fixed
-* Some minor bugs fixed
 
 = 4.6 =
 * Asynchronous JavaScript

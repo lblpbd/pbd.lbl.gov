@@ -2,8 +2,7 @@
 
 namespace Timber\Cache;
 
-interface TimberKeyGeneratorInterface {
-
-	public function _get_cache_key();
-
+interface TimberKeyGeneratorInterface
+{
+    public function _get_cache_key();
 }

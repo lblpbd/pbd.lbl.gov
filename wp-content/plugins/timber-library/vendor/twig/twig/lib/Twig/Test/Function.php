@@ -13,7 +13,6 @@
  * Represents a function template test.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
  * @deprecated since 1.12 (to be removed in 2.0)
  */
 class Twig_Test_Function extends Twig_Test

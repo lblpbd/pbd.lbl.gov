@@ -35,16 +35,8 @@ var nfField = Backbone.Model.extend( {
 			this.updateData();
 			// Remove any tinyMCE editors
 			jQuery( '#ninja_forms_field_' + field_id + '_inside' ).find( 'div.rte' ).each( function() {
-				if ( 'undefined' != typeof tinymce ) {
-					try {
-						var editor_id = jQuery( this ).find( 'textarea.wp-editor-area' ).prop( 'id' );
-						tinymce.remove( '#' + editor_id );	
-					} catch (e ) {
-
-					}
-									
-				}
-
+				var editor_id = jQuery( this ).find( 'textarea.wp-editor-area' ).prop( 'id' );
+				tinymce.remove( '#' + editor_id );
 			} );
 
 			jQuery( '#ninja_forms_field_' + field_id + '_inside' ).slideUp('fast', function( e ) {
@@ -62,7 +54,6 @@ var nfField = Backbone.Model.extend( {
 	updateHTML: function() {
 		var field_id = this.id;
 		jQuery( '#ninja_forms_metabox_field_' + field_id ).find( '.spinner' ).show();
-		jQuery( '#ninja_forms_metabox_field_' + field_id ).find( '.spinner' ).css( 'visibility', 'visible' );
 		this.updateData();
 		var data = JSON.stringify( this.toJSON() );
 		var that = this;
@@ -71,15 +62,11 @@ var nfField = Backbone.Model.extend( {
 			// Remove our no-padding class.
 			jQuery( '#ninja_forms_field_' + field_id + '_inside' ).removeClass( 'no-padding' );	
 			jQuery( '#ninja_forms_field_' + field_id + '_inside' ).append( response );
-			if ( typeof nf_ajax_rte_editors !== 'undefined' && 'undefined' !== typeof tinyMCE ) {
+			if ( typeof nf_ajax_rte_editors !== 'undefined' ) {
 				for (var x = nf_ajax_rte_editors.length - 1; x >= 0; x--) {
-					try {
-						var editor_id = nf_ajax_rte_editors[x];
-						tinyMCE.init( tinyMCEPreInit.mceInit[ editor_id ] );
-						try { quicktags( tinyMCEPreInit.qtInit[ editor_id ] ); } catch(e){ console.log( 'error' ); }
-					} catch (e) {
-
-					}
+					var editor_id = nf_ajax_rte_editors[x];
+					tinyMCE.init( tinyMCEPreInit.mceInit[ editor_id ] );
+					try { quicktags( tinyMCEPreInit.qtInit[ editor_id ] ); } catch(e){ console.log( 'error' ); }
 				};
 			}
 
@@ -95,14 +82,7 @@ var nfField = Backbone.Model.extend( {
 	},
 	updateData: function() {
 		var field_id = this.id;
-		if ( 'undefined' != typeof tinyMCE ) {
-			try {
-				tinyMCE.triggerSave();
-			} catch (e) {
-
-			}
-		}
-		
+		tinyMCE.triggerSave();
 		var data = jQuery('[name^=ninja_forms_field_' + field_id + ']');
 		var field_data = jQuery(data).serializeFullArray();
 
@@ -121,8 +101,7 @@ var nfField = Backbone.Model.extend( {
 		var field_id = this.id;
 		var answer = confirm( nf_admin.remove_field );
 		if ( answer ) {
-			var form_id = ninja_forms_settings.form_id
-			jQuery.post(ajaxurl, { form_id: form_id, field_id: field_id, action: 'ninja_forms_remove_field', nf_ajax_nonce:ninja_forms_settings.nf_ajax_nonce }, function( response ) {
+			jQuery.post(ajaxurl, { field_id: field_id, action: 'ninja_forms_remove_field', nf_ajax_nonce:ninja_forms_settings.nf_ajax_nonce }, function( response ) {
 				jQuery( '#ninja_forms_field_' + field_id).remove();
 				jQuery( document ).trigger( 'removeField', [ field_id ] );
 			});
@@ -197,16 +176,11 @@ var nfFields = Backbone.Collection.extend({
 		if ( response.new_type == 'List' ) {
 			this.listOptionsSortable();
 		}
-		if ( typeof nf_ajax_rte_editors !== 'undefined' && 'undefined' !== typeof tinyMCE ) {
+		if ( typeof nf_ajax_rte_editors !== 'undefined' ) {
 			for (var x = nf_ajax_rte_editors.length - 1; x >= 0; x--) {
-				try {
-					var editor_id = nf_ajax_rte_editors[x];
-					tinyMCE.init( tinyMCEPreInit.mceInit[ editor_id ] );
-					try { quicktags( tinyMCEPreInit.qtInit[ editor_id ] ); } catch(e){}
-				} catch (e) {
-
-				}
-
+				var editor_id = nf_ajax_rte_editors[x];
+				tinyMCE.init( tinyMCEPreInit.mceInit[ editor_id ] );
+				try { quicktags( tinyMCEPreInit.qtInit[ editor_id ] ); } catch(e){}
 			};
 		}
 
@@ -271,7 +245,6 @@ var nfForm = Backbone.Model.extend( {
 	save: function() {
 		jQuery( '.nf-save-admin-fields' ).hide();
 		jQuery( '.nf-save-spinner' ).show();
-		jQuery( '.nf-save-spinner' ).css( 'visibility', 'visible' );
 
 		// If our form is new, then prompt for a title before we save
 		if ( 'new' == this.get( 'status' ) ) {
@@ -459,13 +432,9 @@ $( document ).ready( function( $ ) {
 			var wp_editor_count = $( ui.item ).find( '.wp-editor-wrap' ).length;
 			if(wp_editor_count > 0){
 				$(ui.item).find('.wp-editor-wrap').each(function(){
-					try {
-						var ed_id = this.id.replace( 'wp- ', '');
-						ed_id = ed_id.replace( '-wrap', '' );
-						tinyMCE.execCommand( 'mceRemoveControl', false, ed_id );
-					} catch (e) {
-
-					}
+					var ed_id = this.id.replace( 'wp- ', '');
+					ed_id = ed_id.replace( '-wrap', '' );
+					tinyMCE.execCommand( 'mceRemoveControl', false, ed_id );
 				});
 			}
 		},
@@ -473,13 +442,9 @@ $( document ).ready( function( $ ) {
 			var wp_editor_count = $( ui.item ).find( '.wp-editor-wrap' ).length;
 			if( wp_editor_count > 0 ) {
 				$( ui.item ).find( '.wp-editor-wrap').each(function(){
-					try {
-						var ed_id = this.id.replace( 'wp-', '' );
-						ed_id = ed_id.replace( '-wrap', '' );
-						tinyMCE.execCommand( 'mceAddControl', true, ed_id );
-					} catch (e) {
-
-					}
+					var ed_id = this.id.replace( 'wp-', '' );
+					ed_id = ed_id.replace( '-wrap', '' );
+					tinyMCE.execCommand( 'mceAddControl', true, ed_id );
 				});
 			}
 			$( this ).sortable( 'refresh' );

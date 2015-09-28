@@ -42,9 +42,8 @@ add_action( 'plugins_loaded', 'nf_check_post' );
  */
 
 function ninja_forms_session_class_setup(){
-	$transient_id = Ninja_Forms()->session->get( 'nf_transient_id' );
-	if ( $transient_id && ! is_admin() ) {
-		if ( get_transient( $transient_id ) !== false ) {
+	if ( isset ( $_SESSION['ninja_forms_transient_id'] ) and !is_admin() ) {
+		if ( get_transient( $_SESSION['ninja_forms_transient_id'] ) !== false ) {
 			add_action( 'init', 'ninja_forms_setup_processing_class', 5 );
 		}
 	}
@@ -176,7 +175,7 @@ function ninja_forms_display_form( $form_id = '' ){
 
 		if($ajax == 1){
 			$url = admin_url( 'admin-ajax.php' );
-			$url = esc_url_raw( add_query_arg('action', 'ninja_forms_ajax_submit', $url ) );
+			$url = add_query_arg('action', 'ninja_forms_ajax_submit', $url);
 		}else{
 			$url = '';
 		}

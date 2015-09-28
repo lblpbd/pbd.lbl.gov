@@ -134,9 +134,6 @@ class Ninja_Forms_Loading {
 			} else {
 				$default_value = '';
 			}
-
-			$default_value_type = isset ( $data['default_value_type'] ) ? $data['default_value_type'] : '';
-
 			// Check to see if our default value is one of our preset values:
 			get_currentuserinfo();
 			$user_ID 			= $current_user->ID;
@@ -196,12 +193,7 @@ class Ninja_Forms_Loading {
 					} else {
 						$date_format = 'm/d/Y';
 					}
-					$default_value = date( $date_format, current_time( 'timestamp' ) );
-					break;
-				default:
-					if ( 'querystring' == $default_value_type ) {
-						$default_value = isset ( $_GET[ $default_value ] ) ? esc_html( $_GET[ $default_value ] ) : '';
-					}
+					$default_value = date( $date_format, strtotime( 'now' ) );
 					break;
 			}
 
